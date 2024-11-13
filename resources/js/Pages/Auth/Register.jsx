@@ -27,21 +27,22 @@ export default function Register() {
 
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="name" value="Nombre" />
+                    <InputLabel htmlFor="nombres" value="Nombre" />
 
                     <TextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
+                        id="nombres"
+                        name="nombres"
+                        value={data.nombres}
                         className="mt-1 block w-full"
-                        autoComplete="name"
+                        autoComplete="nnombresame"
                         isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
+                        onChange={(e) => setData('nombres', e.target.value)}
                         required
                     />
 
-                    <InputError message={errors.name} className="mt-2" />
+                    <InputError message={errors.nombres} className="mt-2" />
                 </div>
+
                 <div>
                     <InputLabel htmlFor="apellidos" value="Apellidos" />
 

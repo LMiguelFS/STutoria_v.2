@@ -1,0 +1,55 @@
+/* CSS para borde luminoso */
+.borde-luminoso {
+    position: relative;
+    overflow: hidden;
+}
+
+.borde-luminoso::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ffff);
+    background-size: 400%;
+    z-index: -1;
+    animation: glow 3s linear infinite;
+    filter: blur(5px);
+}
+
+@keyframes glow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Asegúrate de que el contenido del botón tenga un fondo para que sea legible */
+.borde-luminoso-content {
+    position: relative;
+    z-index: 1;
+    background-color: #1e40af;
+    /* Fondo azul del botón */
+    border-radius: 0.5rem;
+    /* Borde redondeado */
+}
+
+button {
+    padding: 10px;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+}
+
+button img {
+    display: block;
+}
+
+button:hover {
+    box-shadow: 0 0 15px 5px rgba(0, 255, 255, 0.6),
+        /* color cian */
+        0 0 20px 10px rgba(0, 255, 255, 0.4);
+}
