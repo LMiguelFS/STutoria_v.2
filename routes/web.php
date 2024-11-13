@@ -14,6 +14,15 @@ use Inertia\Inertia;
 //     ]);
 // });
 
+
+
+
+Route::get('/registroindividual', function () {
+    return Inertia::render('registroindividual'); // Asegúrate de que el nombre coincida con el archivo en Pages
+})->name('registroindividual');
+
+
+
 Route::get('/', function () {
     return Inertia::render('Auth/Login'); // Especifica el directorio Auth
 })->name('login');
