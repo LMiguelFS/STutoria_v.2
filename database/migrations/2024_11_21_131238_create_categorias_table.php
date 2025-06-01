@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('motivos', function (Blueprint $table) {
-            $table->id('id_motivo'); // Definir id_motivo como clave primaria
-            $table->string('tipo_motivo', 45);
+        Schema::create('categorias', function (Blueprint $table) {
+            $table->bigInteger('id_categoria')->primary();
+            $table->string('descripcion', 255); // Nombre del motivo
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('motivos');
+        Schema::dropIfExists('categorias');
     }
 };

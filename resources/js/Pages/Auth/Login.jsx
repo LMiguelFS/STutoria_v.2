@@ -5,6 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -13,17 +14,37 @@ export default function Login({ status, canResetPassword }) {
         remember: false,
     });
 
+    // Estado para almacenar el ID del usuario autenticado
+    const [userId, setUserId] = useState(null);
+
     const submit = (e) => {
         e.preventDefault();
 
         post(route('login'), {
+            onSuccess: (response) => {
+                // Verifica si el backend devuelve el user_id
+                const userId = response?.props?.user_id;
+                if (userId) {
+                    setUserId(userId); // Guarda el ID en el estado local
+                    // Opcional: guarda en localStorage para persistencia
+                    localStorage.setItem('userId', userId);
+                }
+            },
             onFinish: () => reset('password'),
         });
     };
 
+
+    // Opcional: Al montar el componente, verifica si hay un ID en localStorage
+    useEffect(() => {
+        const storedUserId = localStorage.getItem('userId');
+        if (storedUserId) {
+            setUserId(storedUserId);
+        }
+    }, []);
+
     return (
         <>
-
             <GuestLayout>
                 <Head title="Log in" />
 
@@ -32,16 +53,6 @@ export default function Login({ status, canResetPassword }) {
                         {status}
                     </div>
                 )}
-
-
-
-                {status && (
-                    <div className="mb-4 text-sm font-medium text-green-600">
-                        {status}
-                    </div>
-                )}
-
-
 
                 <form onSubmit={submit}>
                     <div>
@@ -90,7 +101,6 @@ export default function Login({ status, canResetPassword }) {
                                 Remember me
                             </span>
                         </label>
-
                     </div>
 
                     <div className="mt-4 flex items-center justify-end">
@@ -106,28 +116,24 @@ export default function Login({ status, canResetPassword }) {
                         <PrimaryButton className="ms-4" disabled={processing}>
                             Acceder
                         </PrimaryButton>
-
                     </div>
+
                     <div className="mt-4 flex items-center justify-end">
                         <PrimaryButton>
-                            <Link
-                                href={route('register')}
-                                className="ms-4"
-                            >
+                            <Link href={route('register')} className="ms-4">
                                 Registrarse
                             </Link>
                         </PrimaryButton>
                     </div>
-
-
                 </form>
 
-
+                {/* Muestra el ID del usuario si está disponible */}
+                {userId && (
+                    <div className="mt-4 text-green-600">
+                        <p>Usuario autenticado con ID: {userId}</p>
+                    </div>
+                )}
             </GuestLayout>
-
-
         </>
-
-
     );
 }

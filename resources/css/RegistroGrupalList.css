@@ -1,0 +1,252 @@
+.container {
+    font-family: Arial, sans-serif;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+
+    /* Configuración para el modal */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow-y: auto;
+    max-height: 600px;
+    width: 90%;
+    max-width: 2000px;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+/* Barra de título o área de arrastre */
+.container-header {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    cursor: move;
+    /* Muestra el cursor de movimiento cuando el usuario pasa el ratón por encima */
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+}
+
+
+
+.titulo {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.filtro-contenedor {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filtro-label {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: #555;
+}
+
+.filtro-input {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filtro-boton {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.filtro-boton:hover {
+    background-color: #0056b3;
+}
+
+.loading-text {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.tabla th,
+.tabla td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.tabla th {
+    background-color: #590777;
+    color: white;
+    font-weight: bold;
+}
+
+.tabla tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.volver-filtro {
+    border: 2px solid #4b0082;
+}
+
+.formulario-edicion {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid #4b0082;
+}
+
+.formulario-edicion h3 {
+    text-align: center;
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.formulario-edicion label {
+    display: block;
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.formulario-edicion input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #f1f1f1;
+}
+
+.formulario-edicion input[type="date"] {
+    padding: 8px;
+}
+
+.formulario-edicion button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #590777;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.formulario-edicion button:hover {
+    background-color: #590777;
+}
+
+.formulario-edicion .formulario-edicion__error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.filtro-contenedor {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.filtro-contenedor label {
+    flex: 1;
+    min-width: 150px;
+}
+
+.filtro-contenedor input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.filtro-boton {
+    padding: 8px 16px;
+    background-color: #8111cb;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.filtro-boton:hover {
+    background-color: #590777;
+}
+
+.panel-promo {
+    border: 2px solid #4CAF50;
+    /* Borde verde */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.panel-promo label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.panel-promo select {
+    padding: 8px;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.formulario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border: #4b0082;
+}
+
+.cerrar-modal {
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+}
+
+.cerrar-modal:hover {
+    color: red;
+}

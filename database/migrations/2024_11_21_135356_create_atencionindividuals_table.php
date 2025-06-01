@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('atencionindividuals', function (Blueprint $table) {
+            $table->id();
             $table->date('fecha_atencion'); // Campo fecha_atencion de tipo fecha
             $table->integer('numero_atencion'); // Campo numero_atencion de tipo entero
             $table->string('descripcion_consulta', 900)->nullable(); // Campo descripcion_consulta de tipo VARCHAR(900)
@@ -22,16 +23,12 @@ return new class extends Migration
             // Campos de claves foráneas
             $table->unsignedBigInteger('id_user'); // Clave foránea que apunta a 'users'
             $table->string('codigo_alumno'); // Clave foránea que apunta a 'alumno'
-            $table->unsignedBigInteger('id_motivo'); // Clave foránea que apunta a 'motivo'
+            $table->unsignedBigInteger('id_categoria'); // Clave foránea que apunta a 'motivo'
 
             // Definir las claves foráneas
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('codigo_alumno')->references('codigo_alumno')->on('alumnos')->onDelete('cascade');
-            $table->foreign('id_motivo')->references('id_motivo')->on('motivos')->onDelete('cascade');
-
-
-
-            $table->timestamps();
+            $table->foreign('id_categoria')->references('id_categoria')->on('categorias')->onDelete('cascade');
         });
     }
 

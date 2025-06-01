@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use Inertia\Inertia;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Motivo extends Model
 {
-    /** @use HasFactory<\Database\Factories\MotivoFactory> */
-    use HasFactory;
-    protected $table = 'motivo';
+    protected $table = 'motivos';
     protected $fillable = [
-        'tipo_motivo',
+        'id_categoria',
+        'nombre',
     ];
 }

@@ -4,114 +4,65 @@ import AuthenticatedLayout1 from '@/Layouts/AuthenticatedLayout1';
 import '../../css/panelGeneral.css';
 import PanelRegistrar from '../Pages/PanelOpciones/panelRegistrar';
 import PanelReportes from '../Pages/PanelOpciones/panelReportes';
+import Notificaciones from '../Pages/PanelOpciones/notificaciones';
+import ModificarD from '../Pages/PanelModificadores/panelGeneralEditacion';
+import Estadistica from '../Pages/Estadistica/panel';
 
 export default function Dashboard() {
-    const [selectedOption, setSelectedOption] = useState('En este apartado podras crear registros de sesiones individuales, grupales y registrar a alumnos');
+
+    const [selectedOption, setSelectedOption] = useState('En este apartado podrás crear registros de sesiones individuales, grupales y registrar a alumnos');
 
     const handleOptionClick = (option) => {
         setSelectedOption(option);
     };
 
     return (
-        <AuthenticatedLayout1
-
-        >
+        <AuthenticatedLayout1>
             <Head title="Panel" />
-
             <div className="flex">
                 {/* Panel izquierdo */}
-                <div className="bg-blue-900 text-white w-64 h-screen p-4 flex flex-col items-center space-y-4">
-
-                    <button
-                        className={`flex items-center justify-between w-full px-10 py-5 text-lg font-semibold rounded-lg ${selectedOption === 'En este apartado podras crear registros de sesiones individuales, grupales y registrar a alumnos' ? 'bg-blue-700' : ''
-                            }`}
-                        onClick={() => handleOptionClick('En este apartado podras crear registros de sesiones individuales, grupales y registrar a alumnos')}
-                    >
-                        {/* Texto a la izquierda */}
-                        <span>REGISTRAR</span>
-
-                        {/* Imagen a la derecha y centrada */}
-                        <img src="/img/GenerarI.png" alt="Registrar" className="w-12 h-15 ml-9" />
-                    </button>
-
-                    <button
-                        className={`flex items-center justify-between w-full px-10 py-5 text-lg font-semibold rounded-lg ${selectedOption === 'En este apartado podras buscar registros individuales/grupales o de alumnos y poder modificar o eliminar' ? 'bg-blue-700' : ''
-                            }`}
-                        onClick={() => handleOptionClick('En este apartado podras buscar registros individuales/grupales o de alumnos y poder modificar o eliminar')}
-                    >
-                        {/* Texto a la izquierda */}
-                        <span>CONSULTAR</span>
-                        <img src="/img/Buscar_I.png" alt="Consultar" className='w-12 h-15 ml-6' />
-
-                    </button>
-
-                    <button
-                        className={`flex items-center justify-between w-full px-10 py-5 text-lg font-semibold rounded-lg ${selectedOption === 'En este apartado podras buscar sesiones individuales proximas y poder notificar a dicho estudiane' ? 'bg-blue-700' : ''
-                            }`}
-                        onClick={() => handleOptionClick('En este apartado podras buscar sesiones individuales proximas y poder notificar a dicho estudiane')}
-                    >
-                        <span>NOTIFICAR</span>
-                        <img src="/img/notificacion_I.png" alt="Notificaciones" className="w-12 h-15 ml-10" />
-
-                    </button>
-                    <button
-                        className={`flex items-center justify-between w-full px-10 py-5 text-lg font-semibold rounded-lg ${selectedOption === 'estadistica' ? 'bg-blue-700' : ''
-                            }`}
-                        onClick={() => handleOptionClick('estadistica')}
-                    >
-                        <span>ESTADISTICA</span>
-                        <img src="/img/analitica.png" alt="Estadística" className="w-12 h-15 ml-4" />
-
-                    </button>
-                    <button
-                        className={`flex items-center justify-between w-full px-10 py-5 text-lg font-semibold rounded-lg ${selectedOption === 'En este apartado podras generar informes grupales e individuales de las sesiones realizadas' ? 'bg-blue-700' : ''
-                            }`}
-                        onClick={() => handleOptionClick('En este apartado podras generar informes grupales e individuales de las sesiones realizadas')}
-                    >
-                        <span>REPORTE</span>
-                        <img src="/img/Reporte.png" alt="Reporte" className="w-12 h-15 ml-12" />
-                    </button>
+                <div className="bg-purple-900 text-white w-65   p-4 flex flex-col items-center space-y-4 shadow-lg">
+                    {[
+                        { label: 'REGISTRAR', img: '/img/GenerarI.png', description: '---En este apartado podrás crear registros de sesiones individuales, grupales y registrar a alumnos---' },
+                        { label: 'CONSULTAR', img: '/img/Buscar_I.png', description: 'En este apartado podrás buscar registros individuales/grupales o de alumnos y poder modificar o eliminar' },
+                        { label: 'NOTIFICAR', img: '/img/notificacion_I.png', description: '----En este apartado podrás buscar sesiones individuales próximas y notificar al estudiante----' },
+                        { label: 'ESTADÍSTICA', img: '/img/analitica.png', description: 'En este apartado podrás visualizar estadistica de los diferentes analisis de las sesiones de tutoria' },
+                        { label: 'REPORTES ', img: '/img/Reporte.png', description: '-------En este apartado podrás generar informes grupales e individuales de las sesiones realizadas-------' },
+                    ].map((option) => (
+                        <button
+                            key={option.label}
+                            className={`flex items-center  h-35 px-7 py-10 text-lg font-semibold rounded-lg transition-all duration-300 ${selectedOption === option.description ? 'bg-purple-700 text-yellow-300' : 'bg-purple-800 hover:bg-purple-700'}`}
+                            onClick={() => handleOptionClick(option.description)}
+                        >
+                            <img src={option.img} alt={option.label} className="w-12 h-12 mr-4" />
+                            <span>{option.label}</span>
+                        </button>
+                    ))}
                 </div>
 
-                <div className="flex flex-col min-h-screen bg-gray-100">
-                    {/* Contenedor del cuadro de texto */}
+                {/* Contenido principal */}
+                <div className="flex flex-col min-h-screen bg-gradient-to-r from-purple-100 via-purple-200 to-purple-300">
                     <center>
-                        <div className="flex-1 p-6 bg-gray-100">
-                            <div className="bg-white p-6 rounded-lg shadow-md">
-                                <center>
-                                    <h3 className="text-2xl font-semibold text-gray-800">
-                                        {selectedOption.charAt(0).toUpperCase() + selectedOption.slice(1)}
-                                    </h3>
-                                </center>
+                        <div className="flex-1 p-6">
+                            <div className="bg-white p-6 rounded-lg shadow-lg">
+                                <h3 className="text-2xl font-semibold text-purple-800">
+                                    {selectedOption.charAt(0).toUpperCase() + selectedOption.slice(1)}
+                                </h3>
                             </div>
                         </div>
                     </center>
-
-                    {/* Contenedor del segundo panel que estará debajo  */}
                     <center>
-                        <div className="flex-1 p-6 bg-gray-100">
-                            <div className="bg-white p-4 rounded-lg shadow-ml mx-auto max-h-30 ">
-                                <center>
-                                    {selectedOption === 'En este apartado podras crear registros de sesiones individuales, grupales y registrar a alumnos' ? (
-                                        <PanelRegistrar />
-                                    ) : (
-                                        <h3 className="text-2xl font-semibold text-gray-800">
-                                            {/* Aquí puedes agregar contenido alternativo si es necesario */}
-                                        </h3>
-                                    )}
-                                    {selectedOption === 'En este apartado podras generar informes grupales e individuales de las sesiones realizadas' ? (
-                                        <PanelReportes />
-                                    ) : (
-                                        <h3 className="text-2xl font-semibold text-gray-800">
-                                            {/* Aquí puedes agregar contenido alternativo si es necesario */}
-                                        </h3>
-                                    )}
-                                </center>
+                        <div className="flex-1 p-6">
+                            <div className="bg-white p-4 rounded-lg shadow-md mx-auto max-h-30">
+                                {selectedOption === '---En este apartado podrás crear registros de sesiones individuales, grupales y registrar a alumnos---' && <PanelRegistrar />}
+                                {selectedOption === '-------En este apartado podrás generar informes grupales e individuales de las sesiones realizadas-------' && <PanelReportes />}
+                                {selectedOption === '----En este apartado podrás buscar sesiones individuales próximas y notificar al estudiante----' && <Notificaciones />}
+                                {selectedOption === 'En este apartado podrás buscar registros individuales/grupales o de alumnos y poder modificar o eliminar' && <ModificarD />}
+                                {selectedOption === 'En este apartado podrás visualizar estadistica de los diferentes analisis de las sesiones de tutoria' && <Estadistica />}
                             </div>
                         </div>
                     </center>
                 </div>
-
             </div>
         </AuthenticatedLayout1>
     );
