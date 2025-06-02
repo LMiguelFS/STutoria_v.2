@@ -11,6 +11,7 @@ use App\Http\Controllers\ReporteIController;
 use App\Http\Controllers\AtencionGrupalController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\Usercontroller;
+use App\Models\Asistencia;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -33,8 +34,7 @@ Route::post('/alumnos/import', [AlumnoController::class, 'import']);
 //Contar registros de atención grupal por usuario
 Route::get('/registrogrupals/count', [AtencionGrupalController::class, 'countByUser']);
 //Generar QR para asistencia
-Route::post('/sesiones/generar-qr', [AtencionGrupalController::class, 'generarQR']);
-Route::post('/asistencias/registrar/{codigoTemp}', [AsistenciaController::class, 'registrarConQR']);
+Route::get('/generar-codigo-asistencia', [AsistenciaController::class, 'generarCodigoAsistencia']);
 //-----------------------------------------------------------------------
 Route::apiResource('/alumno', AlumnoController::class);
 Route::get('/reporteIndividual', [ReporteIController::class, 'indexReporte']);

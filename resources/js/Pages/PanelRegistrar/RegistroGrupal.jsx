@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../../css/ModalRegistro.css'; // Estilos separados opcionales
 import axios from 'axios';
+import QRCode from "react-qr-code";
 //-------------------------------------------
 import { usePage } from '@inertiajs/react';
 //-------------------------------------------
@@ -51,6 +52,10 @@ const RegistroGrupal = ({ onClose }) => {
     const [alumnos, setAlumnos] = useState([]);
     const [asistencia, setAsistencia] = useState({});
     const [mostrarOpcionales, setMostrarOpcionales] = useState(false);
+    const [codigoAsistencia, setCodigoAsistencia] = useState('');
+    const [uuidAsistencia, setUuidAsistencia] = useState('');
+    const [showQrModal, setShowQrModal] = useState(false);
+    const [qrCountdown, setQrCountdown] = useState(900); // 15 minutos en segundos
 
     const fetchNroSession = async (userId) => {
         try {
@@ -65,19 +70,18 @@ const RegistroGrupal = ({ onClose }) => {
     useEffect(() => {
         const today = new Date().toISOString().slice(0, 10);
         setFormData((prev) => ({ ...prev, Fecha: today }));
-        // Obtener número de sesiones previas del tutor
-        const fetchAlumnos = async () => {
-            try {
-                const response = await axios.get('/api/alumnos');
-                setAlumnos(response.data);
-            } catch (error) {
-                console.error('Error al cargar la lista de alumnos', error);
-            }
-        };
-
-        fetchAlumnos();
         fetchUsuarioId();
+        fetchCodigoAsistencia();
     }, []);
+
+    // Contador regresivo para el QR
+    useEffect(() => {
+        if (qrCountdown <= 0) return;
+        const timer = setInterval(() => {
+            setQrCountdown((prev) => prev - 1);
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [qrCountdown]);
 
     // Manejar cambios en la lista de asistencia
     const handleAsistenciaChange = (codigo_alumno) => {
@@ -106,6 +110,23 @@ const RegistroGrupal = ({ onClose }) => {
         }
     };
 
+    const fetchCodigoAsistencia = async () => {
+        try {
+            const response = await axios.get('/api/generar-codigo-asistencia');
+            setCodigoAsistencia(response.data.codigo);
+            setUuidAsistencia(response.data.uuid);
+        } catch (error) {
+            console.error('Error al generar el código de asistencia', error);
+        }
+    };
+
+    // Formatea el tiempo mm:ss
+    const formatTime = (seconds) => {
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+        return `${m}:${s.toString().padStart(2, '0')}`;
+    };
+
     return (
         <div style={styles.container}>
 
@@ -132,21 +153,34 @@ const RegistroGrupal = ({ onClose }) => {
                         </div>
                     </div>
 
-                    <div className='form-group'>
-                        <label>Tema:</label>
-                        <input type="text" name="Tema" value={formData.Tema} onChange={handleChange} required />
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '20px',
+                        width: '100%',
+                    }}>
+                        <div className="form-group">
+                            <label>Tema:</label>
+                            <input type="text" name="Tema" value={formData.Tema} onChange={handleChange} required />
+                        </div>
+
+                        <div className='form-group'>
+                            <label>Resultado Esperado:</label>
+                            <input type="text" name="ResultadoEsperado" value={formData.ResultadoEsperado} onChange={handleChange} required />
+                        </div>
                     </div>
 
-                    <div className='form-group'>
-                        <label>Resultado Esperado:</label>
-                        <input type="text" name="ResultadoEsperado" value={formData.ResultadoEsperado} onChange={handleChange} required />
-                    </div>
-
-                    <div className='form-group'>
+                    <div className="form-group" style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start',
+                        marginBottom: '24px',
+                        width: '100%',
+                    }}>
                         <label>Comentario Significativo:</label>
                         <textarea name="ComentarioSignificativo" value={formData.ComentarioSignificativo} onChange={handleChange} required />
-
                     </div>
+
 
                     <div className="form-group-row">
                         <div className='form-group'>
@@ -208,50 +242,81 @@ const RegistroGrupal = ({ onClose }) => {
                     </div>
 
 
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '20px',
+                        width: '100%',
+                    }}>
+                        <div className='form-group'>
+                            <label>Ciclo:</label>
+                            <select name="Ciclo" value={formData.Ciclo} onChange={handleChange} required>
+                                <option value="">Seleccione</option>
+                                <option value="1er">1er</option>
+                                <option value="2do">2do</option>
+                                <option value="3er">3er</option>
+                                <option value="4to">4to</option>
+                                <option value="5to">5to</option>
+                                <option value="6to">6to</option>
+                            </select>
+                        </div>
 
-                    <div className='form-group'>
-                        <label>Ciclo:</label>
-                        <select name="Ciclo" value={formData.Ciclo} onChange={handleChange} required>
-                            <option value="">Seleccione</option>
-                            <option value="1er">1er</option>
-                            <option value="2do">2do</option>
-                            <option value="3er">3er</option>
-                            <option value="4to">4to</option>
-                            <option value="5to">5to</option>
-                            <option value="6to">6to</option>
-                        </select>
+
+                        {/* Botón para mostrar/ocultar campos opcionales */}
+                        <button
+                            type="button"
+                            className="submit-btn"
+                            style={{ marginBottom: '10px', background: '#e0e0e0', color: '#333' }}
+                            onClick={() => setMostrarOpcionales((prev) => !prev)}
+                        >
+                            {mostrarOpcionales ? 'Ocultar campos opcionales' : 'Llenar más campos opcional'}
+                        </button>
                     </div>
 
-
-                    {/* Botón para mostrar/ocultar campos opcionales */}
-                    <button
-                        type="button"
-                        className="submit-btn"
-                        style={{ marginBottom: '10px', background: '#e0e0e0', color: '#333' }}
-                        onClick={() => setMostrarOpcionales((prev) => !prev)}
-                    >
-                        {mostrarOpcionales ? 'Ocultar campos opcionales' : 'Llenar más campos opcional'}
-                    </button>
 
                     {/* Campos opcionales */}
                     {mostrarOpcionales && (
                         <>
-                            <div className='form-group'>
+                            <div className='form-group' style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'flex-start',
+                                marginBottom: '24px',
+                                width: '100%',
+                            }}>
                                 <label>Animación / Motivación:</label>
                                 <textarea name="AnimacionMotivacion" value={formData.AnimacionMotivacion} onChange={handleChange} />
                             </div>
 
-                            <div className='form-group'>
+                            <div className='form-group' style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'flex-start',
+                                marginBottom: '24px',
+                                width: '100%',
+                            }}>
                                 <label>Apropiación / Desarrollo:</label>
                                 <textarea name="ApropiacionDesarrollo" value={formData.ApropiacionDesarrollo} onChange={handleChange} />
                             </div>
 
-                            <div className='form-group'>
+                            <div className='form-group' style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'flex-start',
+                                marginBottom: '24px',
+                                width: '100%',
+                            }}>
                                 <label>Transferencia / Compromiso:</label>
                                 <textarea name="TransferenciaPracticaCompromiso" value={formData.TransferenciaPracticaCompromiso} onChange={handleChange} />
                             </div>
 
-                            <div className='form-group'>
+                            <div className='form-group' style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'flex-start',
+                                marginBottom: '24px',
+                                width: '100%',
+                            }}>
                                 <label>Evaluación:</label>
                                 <textarea name="Evaluacion" value={formData.Evaluacion} onChange={handleChange} />
                             </div>
@@ -260,24 +325,64 @@ const RegistroGrupal = ({ onClose }) => {
 
                     <button type="submit" className="submit-btn">Registrar</button>
                 </form>
+
+
             </div>
-
-
-            {/* Columna 2 - Lista de estudiantes */}
             <div style={styles.studentList}>
-                <h3>Lista de Asistencia</h3>
-                {alumnos.map((alumno, index) => (
-                    <div key={alumno.id || index} style={styles.studentItem}>
-                        <span>{alumno.nombre} {alumno.apellidos}</span>
-                        <input
-                            type="checkbox"
-                            checked={asistencia[alumno.id] || false}
-                            onChange={() => handleAsistenciaChange(alumno.id)}
-                        />
+                {/* Columna 2 - Lista de estudiantes */}
+
+                {codigoAsistencia && (
+                    <div className="my-4 text-center">
+                        <p>Escanea este código o ingresa el código manualmente:</p>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <QRCode value={codigoAsistencia} size={230} />
+                            <p className="mt-2 font-mono text-2xl" style={{ fontSize: 28, margin: '16px 0 8px 0' }}>
+                                {codigoAsistencia}
+                            </p>
+                            <p style={{ fontSize: 18, color: '#555', marginBottom: 8 }}>
+                                Tiempo restante: {formatTime(qrCountdown)}
+                            </p>
+                        </div>
+                        <button
+                            className="btn btn-secondary"
+                            style={{ marginTop: 12 }}
+                            onClick={() => {
+                                setShowQrModal(true);
+                            }}
+                        >
+                            Ampliar QR y Código
+                        </button>
                     </div>
-                ))}
+                )}
             </div>
 
+            {/* Modal para ampliar QR */}
+            {showQrModal && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+                    background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999
+                }}>
+                    <div style={{
+                        background: '#fff', padding: 40, borderRadius: 16, textAlign: 'center', position: 'relative'
+                    }}>
+                        <button
+                            onClick={() => setShowQrModal(false)}
+                            style={{
+                                position: 'absolute', top: 10, right: 10, fontSize: 24, background: 'none', border: 'none', cursor: 'pointer'
+                            }}
+                        >❌</button>
+                        <h2>Código de Asistencia</h2>
+                        <QRCode value={codigoAsistencia} size={400} />
+                        <p style={{ fontSize: 32, margin: '20px 0', fontFamily: 'monospace' }}>{codigoAsistencia}</p>
+                        <p style={{ fontSize: 18, color: '#555' }}>
+                            Tiempo restante: {formatTime(qrCountdown)}
+                        </p>
+                        {qrCountdown <= 0 && (
+                            <p style={{ color: 'red', marginTop: 10 }}>El código ha expirado.</p>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

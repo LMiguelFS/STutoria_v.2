@@ -154,7 +154,13 @@ const ImportarAlumnos = ({ onImport, onClose }) => {
         <div style={styles.modal}>
             <div style={styles.content}>
                 <h2>Importar Alumnos desde Excel</h2>
+                <h3>Ejemplo de como tiene que estar su lista de estudiantes</h3>
+                <img
 
+                    src="/img/FormatoListaExcel.png"
+                    alt="Ejemplo de formato de Excel para importar alumnos"
+                    style={{ width: '100%', maxWidth: 700, margin: '16px 0', border: '1px solid #ccc', borderRadius: 8 }}
+                />
                 <div {...getRootProps()} style={styles.dropzone}>
                     <input {...getInputProps()} />
                     <p>Arrastra tu archivo Excel aquí o haz clic para seleccionarlo</p>

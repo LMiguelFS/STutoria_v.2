@@ -5,6 +5,7 @@ import RegistroIndi from "../PanelRegistrar/registrosessionindividual";
 import RegistroGrupalForm from "../PanelRegistrar/RegistroGrupal";
 import BusquedaAlumno from "../PanelRegistrar/busquedaAlumnoRI";
 import { usePage } from '@inertiajs/react';
+import QRCode from "react-qr-code";
 
 export default function PanelRegistrar() {
     const [showMainModal, setShowMainModal] = useState(false);
@@ -36,7 +37,25 @@ export default function PanelRegistrar() {
         setSelectedComponent(null);
         setSelectedAlumno(null);
     };
+    const [qrCodeData, setQrCodeData] = useState(null);
 
+    const handleOpenRegistroGrupal = async () => {
+        try {
+            const response = await axios.get('api/generar-codigo-asistencia');
+            setQrCodeData(response.data); // guarda { codigo, uuid }
+
+            setSelectedComponent(
+                <RegistroGrupalForm
+                    onClose={closeAllModals}
+                    codigoAsistencia={response.data.codigo}
+                    uuidSesion={response.data.uuid}
+                />
+            );
+            setShowMainModal(true);
+        } catch (error) {
+            console.error("Error generando el código QR", error);
+        }
+    };
     return (
         <>
             {/* Contenedor de los botones */}
@@ -48,10 +67,7 @@ export default function PanelRegistrar() {
                         <h2 className="text-center text-lg font-semibold">SESIONES INDIVIDUALES</h2>
                     </button>
 
-                    <button onClick={() => {
-                        setSelectedComponent(<RegistroGrupalForm onClose={closeAllModals} />);
-                        setShowMainModal(true);
-                    }} className="flex flex-col items-center">
+                    <button onClick={handleOpenRegistroGrupal} className="flex flex-col items-center">
                         <img src="/img/registroGrupal.png" alt="Botón 2" className="w-24 h-24 mb-4" />
                         <h2 className="text-center text-lg font-semibold">SESIONES GRUPALES</h2>
                     </button>

@@ -8,6 +8,7 @@ use App\Models\Asistencia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AsistenciaController extends Controller
 {
@@ -109,41 +110,17 @@ class AsistenciaController extends Controller
         //
     }
 
-    public function registrarConQR($codigoTemp, Request $request)
+    public function  generarCodigoAsistencia()
     {
-        // 1. Verificar código temporal
-        $datosSesion = Cache::get('qr-sesion-' . $codigoTemp);
+        $codigo = Str::random(6); // o usar Str::uuid()
+        $idSesionTemp = Str::uuid();
 
-        if (!$datosSesion) {
-            return response()->json(['error' => 'El código QR ha expirado'], 410);
-        }
+        // Guardamos en cache por 15 minutos (900 segundos)
+        Cache::put('asistencia_' . $codigo, $idSesionTemp, 900); // clave: asistencia_ABC123
 
-        if (now()->gt($datosSesion['valido_hasta'])) {
-            return response()->json(['error' => 'El período de registro ha finalizado'], 410);
-        }
-        // 2. Obtener estudiante autenticado (ajusta según tu sistema)
-        $alumno = Auth::user();
-
-        // 3. Registrar en tu tabla asistencias existente
-        try {
-            DB::transaction(function () use ($datosSesion, $alumno) {
-                Asistencia::create([
-                    'ID_atenciongrupal' => $datosSesion['ID_atenciongrupal'],
-                    'codigo_alumno' => $alumno->codigo_alumno,
-                    'estado' => true // Asistió
-                ]);
-
-                // Opcional: Actualizar contador en la sesión grupal
-                RegistroGrupal::where('id', $datosSesion['ID_atenciongrupal'])
-                    ->increment('asistentes_confirmados');
-            });
-
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'error' => 'Ya has registrado asistencia a esta sesión'
-            ], 409);
-        }
+        return response()->json([
+            'codigo' => $codigo,
+            'uuid' => $idSesionTemp
+        ]);
     }
 }

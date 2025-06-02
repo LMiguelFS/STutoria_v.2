@@ -126,30 +126,4 @@ class AtencionGrupalController extends Controller
         $count = RegistroGrupal::where('user_id', $userId)->count();
         return response()->json(['count' => $count]);
     }
-
-    public function generarQR(Request $request)
-    {
-        $request->validate([
-            'ID_atenciongrupal' => 'required|exists:registrogrupals,id',
-            'duracion_minutos' => 'required|integer|min:1|max:120'
-        ]);
-
-        $codigoTemporal = Str::upper(Str::random(8)); // Ej: "A1B2C3D4"
-
-        // Almacenar en caché por tiempo limitado (Redis o file)
-        Cache::put('qr-sesion-' . $codigoTemporal, [
-            'ID_atenciongrupal' => $request->ID_atenciongrupal,
-            'valido_hasta' => now()->addMinutes($request->duracion_minutos)
-        ], $request->duracion_minutos * 60);
-
-        // Generar QR (usando simplesoftwareio/simple-qrcode)
-        $qrCode = QrCode::size(200)
-            ->generate(route('asistencia.registrar.qr', $codigoTemporal));
-
-        return response()->json([
-            'qr_code' => $qrCode,
-            'codigo_temporal' => $codigoTemporal,
-            'valido_hasta' => now()->addMinutes($request->duracion_minutos)->toDateTimeString()
-        ]);
-    }
 }
