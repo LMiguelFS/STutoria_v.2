@@ -53,10 +53,10 @@ Route::post('/atencionindividual', [AtencionIndividualController::class, 'store'
 Route::put('/alumno/{codigo_alumno}', [AlumnoController::class, 'update']);
 Route::apiResource('/alumno', AlumnoController::class);
 
-Route::get('/estadisticaatencion', [AtencionindividualController::class, 'obtenerEstadisticas']);
+Route::get('/estadisticaatencion/{id_user}', [AtencionindividualController::class, 'obtenerEstadisticas']);
 
 
-Route::get('/estadistica', [CategoriaController::class, 'obtenerEstadisticasCategorias']);
+Route::get('/estadistica/{id_user}', [CategoriaController::class, 'obtenerEstadisticasCategorias']);
 Route::get('/atenciones/proxima-cita', [AtencionIndividualController::class, 'filtrarPorProximaCita']);
 
 //---------------------------------------@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-----------------------------
@@ -77,6 +77,3 @@ Route::post('/recuperar-id', [Usercontroller::class, 'RecuperarID']);
 
 Route::post('/registro-grupal', [AtencionGrupalController::class, 'store']);
 Route::get('/registro-grupal', [AtencionGrupalController::class, 'index']);
-
-
-

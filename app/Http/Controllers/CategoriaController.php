@@ -45,10 +45,13 @@ class CategoriaController extends Controller
 
 
     // En tu controlador, por ejemplo, CategoriaController.php
-    public function obtenerEstadisticasCategorias()
+    public function obtenerEstadisticasCategorias($id_user)
     {
         $estadisticas = DB::table('categorias')
-            ->leftJoin('atencionindividuals', 'categorias.id_categoria', '=', 'atencionindividuals.id_categoria')
+            ->leftJoin('atencionindividuals', function ($join) use ($id_user) {
+                $join->on('categorias.id_categoria', '=', 'atencionindividuals.id_categoria')
+                    ->where('atencionindividuals.id_user', '=', $id_user);
+            })
             ->select('categorias.descripcion', DB::raw('COUNT(atencionindividuals.id) as cantidad'))
             ->groupBy('categorias.descripcion')
             ->orderByDesc('cantidad')

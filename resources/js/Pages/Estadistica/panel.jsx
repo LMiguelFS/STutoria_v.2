@@ -4,7 +4,10 @@ import Registro from "../PanelRegistrar/RegistroAlumno";
 import Estadisticacategoria from "../Estadistica/estadistica";
 import Estadisticasatencion from "./estadisticaatencion";
 
+
 export default function PanelRegistrar() {
+
+
     const [showModal, setShowModal] = useState(false);
     const [selectedComponent, setSelectedComponent] = useState(null);
 
@@ -17,6 +20,8 @@ export default function PanelRegistrar() {
         setShowModal(false);
         setSelectedComponent(null);
     };
+
+  
 
     return (
         <>

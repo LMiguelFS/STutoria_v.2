@@ -13,7 +13,7 @@ const editAlumno = () => {
 
     const buscarEstudiantes = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/alumno', {
+            const response = await axios.get('api/alumno', {
                 params: { codigo_alumno, nombre, semestre }
             });
             setEstudiantes(response.data);
@@ -34,7 +34,7 @@ const editAlumno = () => {
 
     const handleUpdate = async () => {
         try {
-            await axios.put(`http://localhost:8000/api/alumno/${selectedStudent.codigo_alumno}`, selectedStudent);
+            await axios.put(`api/alumno/${selectedStudent.codigo_alumno}`, selectedStudent);
             setIsEditing(false); // Salir del modo de edición
             buscarEstudiantes(); // Actualiza la lista de estudiantes
         } catch (error) {
@@ -213,39 +213,91 @@ const editAlumno = () => {
                         </div>
                     </form>
 
-                    <div style={styles.tableContainer}>
-                        <h3>Resultados</h3>
-                        <table className='tabla'>
-                            <thead>
-                                <tr>
-                                    <th>Código Alumno</th>
-                                    <th>Nombre</th>
-                                    <th>Apellidos</th>
-                                    <th>Semestre</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {estudiantes.length > 0 ? (
-                                    estudiantes.map((estudiante) => (
-                                        <tr key={estudiante.codigo_alumno}>
-                                            <td>{estudiante.codigo_alumno}</td>
-                                            <td>{estudiante.nombre}</td>
-                                            <td>{estudiante.apellidos}</td>
-                                            <td>{estudiante.semestre}</td>
-                                            <td>
-                                                <button onClick={() => handleEdit(estudiante)}>Editar</button>
-                                                <button onClick={() => eliminarRegistro(estudiante.codigo_alumno)}>Eliminar</button>
-                                            </td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="5">No se encontraron resultados</td>
+                    <div style={{
+                        background: "#fff",
+                        borderRadius: "10px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                        padding: "20px",
+                        marginTop: "20px"
+                    }}>
+                        <h3 style={{ color: "#4B0082" }}>Resultados</h3>
+                        <div style={{
+                            maxHeight: "300px",
+                            overflowY: "auto",
+                            borderRadius: "8px",
+                            border: "1px solid #eee",
+                            background: "#f9f9f9"
+                        }}>
+                            <table className='tabla' style={{ width: "100%", borderCollapse: "collapse" }}>
+                                <thead>
+                                    <tr style={{ background: "#e9e9ff" }}>
+                                        <th>Código Alumno</th>
+                                        <th>Nombre</th>
+                                        <th>Apellidos</th>
+                                        <th>Semestre</th>
+                                        <th>Acciones</th>
                                     </tr>
-                                )}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {estudiantes.length > 0 ? (
+                                        estudiantes.map((estudiante) => (
+                                            <tr key={estudiante.codigo_alumno}>
+                                                <td>{estudiante.codigo_alumno}</td>
+                                                <td>{estudiante.nombre}</td>
+                                                <td>{estudiante.apellidos}</td>
+                                                <td>{estudiante.semestre}</td>
+                                                <td>
+                                                    <button
+                                                        onClick={() => handleEdit(estudiante)}
+                                                        title="Editar"
+                                                        style={{
+                                                            backgroundColor: "#ff4444",
+                                                            border: "none",
+                                                            borderRadius: "4px",
+                                                            padding: "4px 8px",
+                                                            marginRight: "4px",
+                                                            cursor: "pointer",
+                                                        }}
+                                                    >
+                                                        {/* Lápiz SVG simple */}
+                                                        <svg width="18" height="18" viewBox="0 0 20 20">
+                                                            <rect x="3" y="14" width="4" height="3" fill="none" stroke="#111" strokeWidth="1.5" />
+                                                            <polygon points="4,13 15,2 18,5 7,16" fill="none" stroke="#111" strokeWidth="2" />
+                                                            <line x1="15" y1="2" x2="18" y2="5" stroke="#111" strokeWidth="2" />
+                                                        </svg>
+                                                    </button>
+                                                    <button
+                                                        onClick={() => eliminarRegistro(estudiante.codigo_alumno)}
+                                                        title="Eliminar"
+                                                        style={{
+                                                            backgroundColor: "#ffe066",
+                                                            border: "none",
+                                                            borderRadius: "4px",
+                                                            padding: "4px 8px",
+                                                            cursor: "pointer",
+                                                        }}
+                                                    >
+                                                        {/* Tacho SVG simple */}
+                                                        <svg width="18" height="18" viewBox="0 0 20 20">
+                                                            <rect x="5" y="7" width="10" height="8" fill="none" stroke="#111" strokeWidth="2" />
+                                                            <line x="7" y1="7" x2="7" y2="15" stroke="#111" strokeWidth="1.5" />
+                                                            <line x="10" y1="7" x2="10" y2="15" stroke="#111" strokeWidth="1.5" />
+                                                            <line x="13" y1="7" x2="13" y2="15" stroke="#111" strokeWidth="1.5" />
+                                                            <rect x="8" y="4" width="4" height="2" fill="none" stroke="#111" strokeWidth="2" />
+                                                            <line x="6" y1="7" x2="14" y2="7" stroke="#111" strokeWidth="2" />
+                                                        </svg>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="5" style={{ textAlign: "center", color: "#888" }}>No se encontraron resultados</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </>
             )}

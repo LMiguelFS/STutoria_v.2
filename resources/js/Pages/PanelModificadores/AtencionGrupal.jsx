@@ -17,14 +17,15 @@ const RegistroGrupalList = () => {
     const [loading, setLoading] = useState(false);
     const [registroEditar, setRegistroEditar] = useState(null);
     const [formularioEdicionVisible, setFormularioEdicionVisible] = useState(false); // Nuevo estado
+    const [userId, setUserId] = useState(null); // Nuevo estado para guardar el id del usuario
 
     const fetchUsuarioId = async () => {
         try {
             const response = await axios.post(`/api/recuperar-id?email=${auth.user.email}`);
             if (response.data && response.data.id) {
-                const idUser = response.data.id; // ID del usuario
-                console.log("ID del usuario recuperado:", idUser); // Muestra el ID en la consola
-                obtenerDatos(idUser, filtros); // Llama a obtenerDatos con el ID y filtros actuales
+                const idUser = response.data.id;
+                setUserId(idUser); // Guarda el id en el estado
+                obtenerDatos(idUser, false); // Llama a obtenerDatos sin filtros al inicio
             } else {
                 console.error('No se pudo encontrar el ID del usuario.');
             }
@@ -38,7 +39,7 @@ const RegistroGrupalList = () => {
         setLoading(true);
         try {
             const params = {
-                user_id: userId, // Filtra por el usuario autenticado
+                user_id: userId,
                 ...(applyFilters
                     ? Object.fromEntries(
                         Object.entries(filtros).filter(([_, value]) => value)
@@ -66,14 +67,16 @@ const RegistroGrupalList = () => {
     };
 
     const aplicarFiltros = () => {
-        obtenerDatos(true); // Aplica los filtros
+        if (userId) {
+            obtenerDatos(userId, true); // Pasa el userId y activa los filtros
+        }
     };
 
     const eliminarRegistro = async (id) => {
         if (window.confirm("¿Estás seguro de eliminar este registro?")) {
             try {
-                await axios.delete(`http://localhost:8000/api/registrogrupals/${id}`);
-                obtenerDatos(); // Recarga los datos después de eliminar
+                await axios.delete(`api/registrogrupals/${id}`);
+                if (userId) obtenerDatos(userId, false); // Recarga los datos después de eliminar
             } catch (error) {
                 console.error("Error al eliminar el registro:", error);
             }
@@ -97,10 +100,10 @@ const RegistroGrupalList = () => {
     const guardarEdicion = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:8000/api/registrogrupals/${registroEditar.id}`, registroEditar);
-            setRegistroEditar(null); // Cerrar el formulario de edición
-            setFormularioEdicionVisible(false); // Ocultar formulario de edición
-            obtenerDatos(); // Recargar los datos después de editar
+            await axios.put(`api/registrogrupals/${registroEditar.id}`, registroEditar);
+            setRegistroEditar(null);
+            setFormularioEdicionVisible(false);
+            if (userId) obtenerDatos(userId, false); // Recargar los datos después de editar
         } catch (error) {
             console.error("Error al guardar la edición:", error);
         }
@@ -189,15 +192,43 @@ const RegistroGrupalList = () => {
                                             <td>
                                                 <button
                                                     onClick={() => editarRegistro(registro.id)}
-                                                    className="accion-boton editar"
+                                                    title="Editar"
+                                                    style={{
+                                                        backgroundColor: "#ffe066", 
+                                                        border: "none",
+                                                        borderRadius: "4px",
+                                                        padding: "4px 8px",
+                                                        marginRight: "4px",
+                                                        cursor: "pointer",
+                                                    }}
                                                 >
-                                                    Editar
+                                                    {/* Lápiz SVG simple */}
+                                                    <svg width="18" height="18" viewBox="0 0 20 20">
+                                                        <rect x="3" y="14" width="4" height="3" fill="none" stroke="#111" strokeWidth="1.5" />
+                                                        <polygon points="4,13 15,2 18,5 7,16" fill="none" stroke="#111" strokeWidth="2" />
+                                                        <line x1="15" y1="2" x2="18" y2="5" stroke="#111" strokeWidth="2" />
+                                                    </svg>
                                                 </button>
                                                 <button
                                                     onClick={() => eliminarRegistro(registro.id)}
-                                                    className="accion-boton eliminar"
+                                                    title="Eliminar"
+                                                    style={{
+                                                        backgroundColor: "#ff4444",
+                                                        border: "none",
+                                                        borderRadius: "4px",
+                                                        padding: "4px 8px",
+                                                        cursor: "pointer",
+                                                    }}
                                                 >
-                                                    Eliminar
+                                                    {/* Tacho SVG simple */}
+                                                    <svg width="18" height="18" viewBox="0 0 20 20">
+                                                        <rect x="5" y="7" width="10" height="8" fill="none" stroke="#111" strokeWidth="2" />
+                                                        <line x1="7" y1="7" x2="7" y2="15" stroke="#111" strokeWidth="1.5" />
+                                                        <line x1="10" y1="7" x2="10" y2="15" stroke="#111" strokeWidth="1.5" />
+                                                        <line x1="13" y1="7" x2="13" y2="15" stroke="#111" strokeWidth="1.5" />
+                                                        <rect x="8" y="4" width="4" height="2" fill="none" stroke="#111" strokeWidth="2" />
+                                                        <line x1="6" y1="7" x2="14" y2="7" stroke="#111" strokeWidth="2" />
+                                                    </svg>
                                                 </button>
                                             </td>
                                         </tr>

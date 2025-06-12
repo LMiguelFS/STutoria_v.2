@@ -11,7 +11,7 @@ export default defineConfig({
         react(),
     ],
     server: {
-        host: '192.168.137.84', // Cambia esto por tu IP local
+        host: 'localhost', // Cambia esto por tu IP local
         port: 8000, // Puerto del servidor de desarrollo
     },
 });

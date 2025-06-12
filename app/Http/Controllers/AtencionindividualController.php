@@ -74,21 +74,22 @@ class AtencionindividualController extends Controller
         ], 201);
     }
 
-    public function obtenerEstadisticas()
+    public function obtenerEstadisticas($id_user)
     {
         // 1. Cantidad de atenciones por tutor
-        $atencionesPorTutor = AtencionIndividual::select('id_user', DB::raw('COUNT(*) as cantidad'))
-            ->groupBy('id_user')
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'id_user' => $item->id_user,
-                    'cantidad' => $item->cantidad,
-                ];
-            });
+        //$atencionesPorTutor = AtencionIndividual::select('id_user', DB::raw('COUNT(*) as cantidad'))
+        //    ->groupBy('id_user')
+        //    ->get()
+        //    ->map(function ($item) {
+        //        return [
+        //            'id_user' => $item->id_user,
+        //            'cantidad' => $item->cantidad,
+        //        ];
+        //    });
 
         // 2. Cantidad de atenciones por fecha
         $atencionesPorFecha = AtencionIndividual::select(DB::raw('DATE(fecha_atencion) as fecha'), DB::raw('COUNT(*) as cantidad'))
+            ->where('id_user', $id_user) // Filtrar por el usuario autenticado
             ->groupBy('fecha')
             ->get()
             ->map(function ($item) {
@@ -99,8 +100,9 @@ class AtencionindividualController extends Controller
             });
 
         // 3. Frecuencia de acuerdos establecidos por categoría
-        $frecuenciaPorCategoria = Categoria::withCount(['atenciones' => function ($query) {
-            $query->whereNotNull('acuerdos_establecidos');
+        $frecuenciaPorCategoria = Categoria::withCount(['atenciones' => function ($query) use ($id_user) {
+            $query->whereNotNull('acuerdos_establecidos')
+                ->where('id_user', $id_user);
         }])->get()
             ->map(function ($categoria) {
                 return [
@@ -111,23 +113,23 @@ class AtencionindividualController extends Controller
             });
 
         // 4. Relación entre atenciones y próxima cita
-        $relacionAtenciones = AtencionIndividual::select('id_user', DB::raw('COUNT(*) as cantidad_atenciones'), DB::raw('AVG(DATEDIFF(proxima_cita, fecha_atencion)) as duracion_promedio'))
-            ->groupBy('id_user')
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'id_user' => $item->id_user,
-                    'cantidad_atenciones' => $item->cantidad_atenciones,
-                    'duracion_promedio' => $item->duracion_promedio,
-                ];
-            });
+        //$relacionAtenciones = AtencionIndividual::select('id_user', DB::raw('COUNT(*) as cantidad_atenciones'), DB::raw('AVG(DATEDIFF(proxima_cita, fecha_atencion)) as duracion_promedio'))
+        //    ->groupBy('id_user')
+        //    ->get()
+        //    ->map(function ($item) {
+        //        return [
+        //            'id_user' => $item->id_user,
+        //            'cantidad_atenciones' => $item->cantidad_atenciones,
+        //            'duracion_promedio' => $item->duracion_promedio,
+        //        ];
+        //    });
 
         // Retornar todas las estadísticas en un solo JSON
         return response()->json([
-            'atenciones_por_tutor' => $atencionesPorTutor,
+            //'atenciones_por_tutor' => $atencionesPorTutor,
             'atenciones_por_fecha' => $atencionesPorFecha,
             'frecuencia_por_categoria' => $frecuenciaPorCategoria,
-            'relacion_atenciones' => $relacionAtenciones,
+            //'relacion_atenciones' => $relacionAtenciones,
         ]);
     }
 

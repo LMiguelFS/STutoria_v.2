@@ -1,17 +1,37 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+//-------------------------------------------
+import { usePage } from '@inertiajs/react';
+//-------------------------------------------
 export default function PanelReportes() {
+    //------------------------------------------------
+    const { auth } = usePage().props;
+    //------------------------------------------------
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [reportType, setReportType] = useState('grupal');
 
     const handlePrint = () => {
+        const params = `?startDate=${startDate}&endDate=${endDate}&id_user=${auth.user.id}`;
         if (reportType === 'individual') {
-            // Abrir el enlace del reporte individual
-            window.open('http://127.0.0.1:8000/api/reporteIndividual', '_blank');
+            window.open(`api/reporteIndividual${params}`, '_blank');
         } else {
-            window.open('http://127.0.0.1:8000/api/reporteGrupal', '_blank');
+            window.open(`api/reporteGrupal${params}`, '_blank');
+        }
+    };
+
+    const fetchUsuarioId = async () => {
+        try {
+            const response = await axios.post(`/api/recuperar-id?email=${auth.user.email}`);
+            if (response.data && response.data.id) {
+                const idUser = response.data.id; // ID del usuario
+                console.log("ID del usuario recuperado:", idUser); // Muestra el ID en la consola
+                obtenerDatos(idUser, filtros); // Llama a obtenerDatos con el ID y filtros actuales
+            } else {
+                console.error('No se pudo encontrar el ID del usuario.');
+            }
+        } catch (error) {
+            console.error('Error al obtener el ID del usuario:', error);
         }
     };
 

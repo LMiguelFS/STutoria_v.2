@@ -8,13 +8,17 @@ use Illuminate\Support\Facades\DB;
 
 class ReporteIController extends Controller
 {
-    public function indexReporte()
+    public function indexReporte(Request $request)
     {
-        // Obtiene los datos desde la tabla 'atencionindividuals'
-        // Realizar un JOIN para obtener el nombre del motivo
-        $datas = DB::table('atencionindividuals')
+        // Recibe las fechas desde la petición GET
+        $startDate = $request->query('startDate');
+        $endDate = $request->query('endDate');
+        $idUser = $request->query('id_user');
+
+        // Construye la consulta con filtro de fechas si se proporcionan
+        $query = DB::table('atencionindividuals')
             ->join('categorias', 'atencionindividuals.id_categoria', '=', 'categorias.id_categoria')
-            ->join('alumnos', 'atencionindividuals.codigo_alumno', '=', 'alumnos.codigo_alumno') // JOIN adicional
+            ->join('alumnos', 'atencionindividuals.codigo_alumno', '=', 'alumnos.codigo_alumno')
             ->select(
                 'atencionindividuals.fecha_atencion',
                 'atencionindividuals.numero_atencion',
@@ -24,11 +28,19 @@ class ReporteIController extends Controller
                 'atencionindividuals.observaciones',
                 'atencionindividuals.id_user',
                 'atencionindividuals.codigo_alumno',
-                'categorias.descripcion', // Selecciona el nombre del motivo
-                'alumnos.nombre',      // Selecciona el nombre del alumno
-                'alumnos.apellidos',    // Selecciona el apellido del alumno
-            )
-            ->get();
+                'categorias.descripcion',
+                'alumnos.nombre',
+                'alumnos.apellidos',
+            );
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('atencionindividuals.fecha_atencion', [$startDate, $endDate]);
+        }
+        if ($idUser) {
+            $query->where('atencionindividuals.id_user', $idUser);
+        }
+
+        $datas = $query->get();
 
 
         // Genera el PDF en formato horizontal (landscape)
@@ -38,14 +50,32 @@ class ReporteIController extends Controller
         // Devuelve el PDF en el navegador
         return $pdf->stream('Reporte_Sesiones_Individuales.pdf');
     }
-    public function indexReporteG()
+
+    public function indexReporteG(Request $request)
     {
-        $datas = DB::table('registrogrupals')->get();
-        // Genera el PDF en formato horizontal (landscape)
+        $startDate = $request->query('startDate');
+        $endDate = $request->query('endDate');
+        $idUser = $request->query('id_user');
+
+        $query = DB::table('registrogrupals');
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('Fecha', [$startDate, $endDate]);
+        } elseif ($startDate) {
+            $query->where('Fecha', '>=', $startDate);
+        } elseif ($endDate) {
+            $query->where('Fecha', '<=', $endDate);
+        }
+
+        if ($idUser) {
+            $query->where('user_id', $idUser);
+        }
+
+        $datas = $query->get();
+
         $pdf = PDF::loadView('reporteGrupal', ['datas' => $datas])
             ->setPaper('a4'); // Configura la orientación
 
-        // Devuelve el PDF en el navegador
         return $pdf->stream('Reporte_Sesiones_Grupales.pdf');
     }
 }

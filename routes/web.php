@@ -40,14 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-// Route::view('/atencion-grupal', 'welcome');
-// Route::prefix('api/atencion-grupal')->group(function () {
-//     Route::get('/', [AtencionGrupalController::class, 'index']);
-//     Route::post('/', [AtencionGrupalController::class, 'store']);
-//     Route::put('/{id}', [AtencionGrupalController::class, 'update']);
-//     Route::delete('/{id}', [AtencionGrupalController::class, 'destroy']);
-// });
+Route::get('/asistencia', function () {
+    return Inertia::render('Asistencia/RegistroAsistenciaPage');
+});
 
 Route::get('/estadisticas', function () {
     return Inertia::render('estadisticaatencion'); // Asegúrate de que el nombre coincida con el archivo en Pages
