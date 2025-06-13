@@ -36,7 +36,7 @@ export default function PanelReportes() {
     };
 
     return (
-        <div className="flex flex-col items-center p-10 bg-purple-100 min-h-screen">
+        <div className="flex flex-col items-center p-10 bg-purple-100 min-h">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
                 <h2 className="text-3xl font-semibold text-purple-700 mb-6">Opciones de Reporte</h2>
 

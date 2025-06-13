@@ -25,6 +25,7 @@
         "@zxing/browser": "^0.1.5",
         "bootstrap": "^5.3.3",
         "chart.js": "^4.4.6",
+        "html5-qrcode": "^2.3.8",
         "qrcode.react": "^4.2.0",
         "qs": "^6.13.1",
         "react-calendar": "^5.1.0",

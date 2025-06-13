@@ -1,81 +1,73 @@
-import React, { useState } from 'react';
-//import QrReader from 'react-qr-reader';
+import React, { useState, useRef } from 'react';
+import { Html5Qrcode } from 'html5-qrcode';
 
-
-const RegistroSesionGrupal = () => {
-    const [codigoSesion, setCodigoSesion] = useState('');
+const RegistroAsistencia = () => {
+    const [codigo, setCodigo] = useState('');
     const [mensaje, setMensaje] = useState('');
-    const [mostrarQR, setMostrarQR] = useState(false);
+    const [escanerActivo, setEscanerActivo] = useState(false);
+    const qrRef = useRef(null);
 
-    const manejarEnvio = () => {
-        if (!codigoSesion.trim()) {
-            setMensaje('❌ Debes ingresar el código de sesión');
+    const iniciarEscaner = () => {
+        const qrDivId = "qr-reader";
+        if (!document.getElementById(qrDivId)) {
+            setMensaje('❌ No se encontró el contenedor del lector QR.');
             return;
         }
-        setMensaje(`✅ Sesión ${codigoSesion} lista para registrar (simulado)`);
-    };
 
-    const handleScan = (data) => {
-        if (data) {
-            setCodigoSesion(data.text);
-            setMensaje('✅ Código QR escaneado correctamente');
-            setMostrarQR(false);
-        }
-    };
+        setEscanerActivo(true);
+        const html5QrCode = new Html5Qrcode(qrDivId);
 
-    const handleError = (err) => {
-        setMensaje('❌ Error al acceder a la cámara');
-        setMostrarQR(false);
+        html5QrCode.start(
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: 250
+            },
+            (decodedText) => {
+                setCodigo(decodedText);
+                setMensaje("✅ Código escaneado correctamente.");
+                html5QrCode.stop().then(() => {
+                    setEscanerActivo(false);
+                });
+            },
+            (errorMessage) => {
+                // Puedes ignorar errores de escaneo intermitentes
+            }
+        ).catch((err) => {
+            setMensaje(`❌ Error al iniciar escáner: ${err}`);
+            setEscanerActivo(false);
+        });
     };
 
     return (
-        <div className="max-w-md bg-white p-6 rounded-xl shadow-md space-y-4">
-            <h2 className="text-xl font-semibold text-center">Registrar Sesión Grupal</h2>
-            <div>
-                <label className="block text-sm font-medium text-gray-700">Código de Sesión</label>
-                <input
-                    type="text"
-                    className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300"
-                    value={codigoSesion}
-                    onChange={(e) => setCodigoSesion(e.target.value)}
-                    placeholder="Ej. SESION2025"
-                />
-            </div>
-            <button
-                onClick={manejarEnvio}
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            >
-                Registrar Sesión
-            </button>
-            <button
-                onClick={() => setMostrarQR(true)}
-                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
-                type="button"
-            >
-                Escanear Código QR
-            </button>
-            {mostrarQR && (
-                <div className="mt-4">
-                    <QrReader
-                        delay={300}
-                        onError={handleError}
-                        onScan={handleScan}
-                        style={{ width: '100%' }}
-                    />
+        <div className="p-6 bg-white rounded shadow-md max-w-md mx-auto">
+            <h2 className="text-xl font-bold mb-4">Registro de Asistencia</h2>
 
-                    <button
-                        onClick={() => setMostrarQR(false)}
-                        className="mt-2 w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-                    >
-                        Cancelar
-                    </button>
-                </div>
-            )}
+            <input
+                type="text"
+                placeholder="Ingrese el código o escanee"
+                value={codigo}
+                onChange={(e) => setCodigo(e.target.value)}
+                className="border p-2 w-full mb-2"
+            />
+
+            <button
+                onClick={iniciarEscaner}
+                className="bg-blue-500 text-white px-4 py-2 rounded w-full"
+                disabled={escanerActivo}
+            >
+                Escanear QR
+            </button>
+
+            <div id="qr-reader" ref={qrRef} className="mt-4" style={{ width: '100%' }}></div>
+
             {mensaje && (
-                <div className={`mt-4 p-2 rounded text-center font-medium ${mensaje.startsWith('✅') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                <div className="mt-4 p-2 bg-gray-100 text-center rounded">
                     {mensaje}
                 </div>
             )}
         </div>
     );
 };
+
+export default RegistroAsistencia;
