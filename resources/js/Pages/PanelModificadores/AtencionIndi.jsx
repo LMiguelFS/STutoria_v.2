@@ -186,43 +186,52 @@ const AtencionIndividualList = () => {
                                             <td>{registro.acuerdos_establecidos}</td>
                                             <td>
                                                 <button
-                                                    onClick={() => editarRegistro(registro.id)}
-                                                    title="Editar"
-                                                    style={{
-                                                        backgroundColor: "#ffe066",
-                                                        border: "none",
-                                                        borderRadius: "4px",
-                                                        padding: "4px 8px",
-                                                        marginRight: "4px",
-                                                        cursor: "pointer",
-                                                    }}
-                                                >
-                                                    {/* Lápiz SVG simple */}
-                                                    <svg width="18" height="18" viewBox="0 0 20 20">
-                                                        <rect x="3" y="14" width="4" height="3" fill="none" stroke="#111" strokeWidth="1.5" />
-                                                        <polygon points="4,13 15,2 18,5 7,16" fill="none" stroke="#111" strokeWidth="2" />
-                                                        <line x1="15" y1="2" x2="18" y2="5" stroke="#111" strokeWidth="2" />
-                                                    </svg>
-                                                </button>
-                                                <button
                                                     onClick={() => eliminarRegistro(registro.id)}
                                                     title="Eliminar"
                                                     style={{
-                                                        backgroundColor: "#ff4444",
+                                                        backgroundColor: "#ff8787", // Rojo
                                                         border: "none",
-                                                        borderRadius: "4px",
-                                                        padding: "4px 8px",
+                                                        borderRadius: "6px",
+                                                        padding: "6px 10px",
+                                                        marginRight: "8px",
                                                         cursor: "pointer",
+                                                        transition: "background-color 0.3s",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center"
                                                     }}
+                                                    onMouseOver={e => e.currentTarget.style.backgroundColor = "#ff6b6b"}
+                                                    onMouseOut={e => e.currentTarget.style.backgroundColor = "#ff8787"}
                                                 >
-                                                    {/* Tacho SVG simple */}
-                                                    <svg width="18" height="18" viewBox="0 0 20 20">
-                                                        <rect x="5" y="7" width="10" height="8" fill="none" stroke="#111" strokeWidth="2" />
-                                                        <line x1="7" y1="7" x2="7" y2="15" stroke="#111" strokeWidth="1.5" />
-                                                        <line x1="10" y1="7" x2="10" y2="15" stroke="#111" strokeWidth="1.5" />
-                                                        <line x1="13" y1="7" x2="13" y2="15" stroke="#111" strokeWidth="1.5" />
-                                                        <rect x="8" y="4" width="4" height="2" fill="none" stroke="#111" strokeWidth="2" />
-                                                        <line x1="6" y1="7" x2="14" y2="7" stroke="#111" strokeWidth="2" />
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <polyline points="3 6 5 6 21 6" />
+                                                        <path d="M19 6l-1 14H6L5 6" />
+                                                        <path d="M10 11v6" />
+                                                        <path d="M14 11v6" />
+                                                        <path d="M9 6V4h6v2" />
+                                                    </svg>
+                                                </button>
+
+                                                <button
+                                                    onClick={() => editarRegistro(registro.id)}
+                                                    title="Editar"
+                                                    style={{
+                                                        backgroundColor: "#ffe066", // Amarillo
+                                                        border: "none",
+                                                        borderRadius: "6px",
+                                                        padding: "6px 10px",
+                                                        cursor: "pointer",
+                                                        transition: "background-color 0.3s",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center"
+                                                    }}
+                                                    onMouseOver={e => e.currentTarget.style.backgroundColor = "#ffd43b"}
+                                                    onMouseOut={e => e.currentTarget.style.backgroundColor = "#ffe066"}
+                                                >
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <path d="M12 20h9" />
+                                                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
                                                     </svg>
                                                 </button>
                                             </td>

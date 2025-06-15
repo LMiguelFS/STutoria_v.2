@@ -31,6 +31,8 @@ class ReporteIController extends Controller
                 'categorias.descripcion',
                 'alumnos.nombre',
                 'alumnos.apellidos',
+
+
             );
 
         if ($startDate && $endDate) {
@@ -57,7 +59,9 @@ class ReporteIController extends Controller
         $endDate = $request->query('endDate');
         $idUser = $request->query('id_user');
 
-        $query = DB::table('registrogrupals');
+        // Consulta principal de sesiones grupales
+        $query = DB::table('registrogrupals')
+            ->select('registrogrupals.*');
 
         if ($startDate && $endDate) {
             $query->whereBetween('Fecha', [$startDate, $endDate]);
@@ -71,10 +75,33 @@ class ReporteIController extends Controller
             $query->where('user_id', $idUser);
         }
 
-        $datas = $query->get();
+        $sesiones = $query->get();
 
-        $pdf = PDF::loadView('reporteGrupal', ['datas' => $datas])
-            ->setPaper('a4'); // Configura la orientación
+        // Para cada sesión, obtener sus asistencias con datos de alumnos
+        $sesionesConAsistencias = $sesiones->map(function ($sesion) {
+            $asistencias = DB::table('asistencias')
+                ->join('alumnos', 'asistencias.codigo_alumno', '=', 'alumnos.codigo_alumno')
+                ->where('asistencias.ID_atenciongrupal', $sesion->id)
+                ->select(
+                    'asistencias.id as asistencia_id',
+                    'asistencias.ID_atenciongrupal',
+                    'asistencias.codigo_alumno',
+                    'alumnos.nombre',
+                    'alumnos.apellidos',
+                    'alumnos.edad',
+                    'alumnos.correo_institucional'
+                )
+                ->get();
+
+            return [
+                'sesion' => $sesion,
+                'asistencias' => $asistencias
+            ];
+        });
+
+        $pdf = PDF::loadView('reporteGrupal', [
+            'datas' => $sesionesConAsistencias
+        ])->setPaper('a4', 'portrait');
 
         return $pdf->stream('Reporte_Sesiones_Grupales.pdf');
     }

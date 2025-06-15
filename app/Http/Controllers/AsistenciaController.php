@@ -33,46 +33,80 @@ class AsistenciaController extends Controller
      */
     public function store(Request $request)
     {
+        // Validación de los datos recibidos
         $validated = $request->validate([
-            // Tus reglas de validación existentes para RegistroGrupal
+            'user_id' => 'required|integer|exists:users,id',
+            'Fecha' => 'required|date',
+            'Tema' => 'required|string|max:200',
+            'Nro_session' => 'required|integer',
+            'ResultadoEsperado' => 'required|string|max:200',
+            'ComentarioSignificativo' => 'nullable|string|max:200',
+            'NroEstudiantesVarones' => 'nullable|integer',
+            'NroEstudiantesMujeres' => 'nullable|integer',
+            'CumplimientoObjetivo' => 'required|in:SI,NO',
+            'InteresDelTema' => 'required|in:SI,NO',
+            'ParticipacionAlumnos' => 'required|in:SI,NO',
+            'AclaracionDudas' => 'required|in:SI,NO',
+            'ReprogramacionDelTema' => 'required|in:SI,NO',
+            'Ciclo' => 'required|string|max:3',
+            'AnimacionMotivacion' => 'nullable|string|max:200',
+            'ApropiacionDesarrollo' => 'nullable|string|max:200',
+            'TransferenciaPracticaCompromiso' => 'nullable|string|max:200',
+            'Evaluacion' => 'nullable|string|max:200',
+            'asistencias' => 'required|array',
+            'asistencias.*.codigo_alumno' => 'required|string',
+            'asistencias.*.estado' => 'required|boolean',
         ]);
 
         DB::beginTransaction();
 
         try {
-            // 1. Crear el registro grupal
-            $registro = RegistroGrupal::create($validated);
+            // Crear el registro grupal
+            $registro = new RegistroGrupal();
+            $registro->user_id = $validated['user_id'];
+            $registro->Fecha = $validated['Fecha'];
+            $registro->Tema = $validated['Tema'];
+            $registro->Nro_session = $validated['Nro_session'];
+            $registro->ResultadoEsperado = $validated['ResultadoEsperado'];
+            $registro->ComentarioSignificativo = $validated['ComentarioSignificativo'];
+            $registro->NroEstudiantesVarones = $validated['NroEstudiantesVarones'];
+            $registro->NroEstudiantesMujeres = $validated['NroEstudiantesMujeres'];
+            $registro->CumplimientoObjetivo = $validated['CumplimientoObjetivo'];
+            $registro->InteresDelTema = $validated['InteresDelTema'];
+            $registro->ParticipacionAlumnos = $validated['ParticipacionAlumnos'];
+            $registro->AclaracionDudas = $validated['AclaracionDudas'];
+            $registro->ReprogramacionDelTema = $validated['ReprogramacionDelTema'];
+            $registro->Ciclo = $validated['Ciclo'];
+            $registro->AnimacionMotivacion = $validated['AnimacionMotivacion'];
+            $registro->ApropiacionDesarrollo = $validated['ApropiacionDesarrollo'];
+            $registro->TransferenciaPracticaCompromiso = $validated['TransferenciaPracticaCompromiso'];
+            $registro->Evaluacion = $validated['Evaluacion'];
+            $registro->save();
 
-            // 2. Registrar las asistencias
-            if ($request->has('asistencias')) {
-                $asistenciasData = [];
-
-                foreach ($request->asistencias as $codigo_alumno => $asistio) {
-                    $asistenciasData[] = [
-                        'ID_atenciongrupal' => $registro->id,
-                        'codigo_alumno' => $codigo_alumno,
-                        'estado' => $asistio,
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ];
-                }
-
-                // Insertar todas las asistencias en una sola operación
-                Asistencia::insert($asistenciasData);
+            // Registrar las asistencias
+            $asistenciasData = [];
+            foreach ($request->asistencias as $asistencia) {
+                $asistenciasData[] = [
+                    'ID_atenciongrupal' => $registro->id,
+                    'codigo_alumno' => $asistencia['codigo_alumno'],
+                    'estado' => $asistencia['estado'],
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
             }
+
+            Asistencia::insert($asistenciasData);
 
             DB::commit();
 
             return response()->json([
-                'success' => true,
-                'message' => 'Registro y asistencias guardados correctamente',
+                'message' => 'Sesión grupal y asistencias registradas exitosamente.',
                 'data' => $registro->load('asistencias')
             ], 201);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
-                'success' => false,
-                'message' => 'Error al guardar el registro',
+                'message' => 'Error al registrar la sesión grupal',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -122,5 +156,37 @@ class AsistenciaController extends Controller
             'codigo' => $codigo,
             'uuid' => $idSesionTemp
         ]);
+    }
+
+    public function registrarIntentoAsistencia(Request $request)
+    {
+        $codigo = $request->input('codigo');
+        $codigo_alumno = $request->input('codigo_alumno');
+        if (!$codigo || !$codigo_alumno) {
+            return response()->json(['error' => 'Datos incompletos'], 400);
+        }
+        // Guardar el código_alumno en cache (array) por 15 minutos
+        $cacheKey = 'asistencia_intentos_' . $codigo;
+        $alumnos = Cache::get($cacheKey, []);
+        if (!in_array($codigo_alumno, $alumnos)) {
+            $alumnos[] = $codigo_alumno;
+            Cache::put($cacheKey, $alumnos, 900); // 15 minutos
+        }
+        return response()->json(['success' => true]);
+    }
+
+    public function alumnosIntentaronPorCodigo(Request $request)
+    {
+        $codigo = $request->query('codigo');
+        if (!$codigo) {
+            return response()->json(['error' => 'Código requerido'], 400);
+        }
+        $cacheKey = 'asistencia_intentos_' . $codigo;
+        $codigos_alumnos = Cache::get($cacheKey, []);
+        // Buscar datos de los alumnos en la base de datos
+        $alumnos = \App\Models\Alumno::whereIn('codigo_alumno', $codigos_alumnos)
+            ->select('codigo_alumno', 'nombre', 'apellidos')
+            ->get();
+        return response()->json(['alumnos' => $alumnos]);
     }
 }

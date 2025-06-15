@@ -35,11 +35,17 @@ Route::post('/alumnos/import', [AlumnoController::class, 'import']);
 Route::get('/registrogrupals/count', [AtencionGrupalController::class, 'countByUser']);
 //Generar QR para asistencia
 Route::get('/generar-codigo-asistencia', [AsistenciaController::class, 'generarCodigoAsistencia']);
+Route::post('/asistencias/intento', [AsistenciaController::class, 'registrarIntentoAsistencia']);
+Route::get('/asistencias/alumnos-intento', [AsistenciaController::class, 'alumnosIntentaronPorCodigo']);
+
+//Conteo de alumnos por sexo
+Route::post('/estudiantes/contar-sexo', [AlumnoController::class, 'contarPorSexo']);
 //-----------------------------------------------------------------------
 Route::apiResource('/alumno', AlumnoController::class);
 Route::get('/reporteIndividual', [ReporteIController::class, 'indexReporte']);
-Route::post('/atencionindividual', [AtencionIndividualController::class, 'store']);
 Route::get('/reporteGrupal', [ReporteIController::class, 'indexReporteG']);
+Route::post('/atencionindividual', [AtencionIndividualController::class, 'store']);
+
 
 Route::apiResource('/registrogrupals', AtencionGrupalController::class);
 Route::apiResource('/asistencia', AsistenciaController::class);

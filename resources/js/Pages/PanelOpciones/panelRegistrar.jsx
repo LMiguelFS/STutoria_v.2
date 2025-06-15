@@ -5,7 +5,6 @@ import RegistroIndi from "../PanelRegistrar/registrosessionindividual";
 import RegistroGrupalForm from "../PanelRegistrar/RegistroGrupal";
 import BusquedaAlumno from "../PanelRegistrar/busquedaAlumnoRI";
 import { usePage } from '@inertiajs/react';
-import QRCode from "react-qr-code";
 
 export default function PanelRegistrar() {
     const [showMainModal, setShowMainModal] = useState(false);

@@ -42,4 +42,9 @@ class registrogrupal extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function asistencias()
+    {
+        return $this->hasMany(Asistencia::class, 'ID_atenciongrupal');
+    }
 }

@@ -10,6 +10,32 @@ use Illuminate\Support\Facades\DB;
 
 class AlumnoController extends Controller
 {
+    public function contarPorSexo(Request $request)
+    {
+        $validated = $request->validate([
+            'codigos' => 'required|array|min:1',
+            'codigos.*' => 'required|string|max:20'
+        ]);
+
+        $conteo = [
+            'varones' => Alumno::whereIn('codigo_alumno', $validated['codigos'])
+                ->where('sexo', 'M')
+                ->count(),
+
+            'mujeres' => Alumno::whereIn('codigo_alumno', $validated['codigos'])
+                ->where('sexo', 'F')
+                ->count(),
+
+            'total' => count($validated['codigos'])
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $conteo,
+            'message' => 'Conteo realizado correctamente'
+        ]);
+    }
+
     public function index(Request $request)
     {
         $query = Alumno::query(); // Asegúrate de que el modelo sea el correcto

@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../../../css/ModalRegistro.css'; // Estilos separados opcionales
 import axios from 'axios';
 import QRCode from "react-qr-code";
+import ListaEstudiantesSesion from './ListaEstudiantesSesion';
 //-------------------------------------------
 import { usePage } from '@inertiajs/react';
 //-------------------------------------------
 
 const RegistroGrupal = ({ onClose }) => {
+    const [asistencias, setAsistencias] = useState({});
+    const [recargarTrigger, setRecargarTrigger] = useState(false);
     //------------------------------------------------
     const { auth } = usePage().props;
     //------------------------------------------------
@@ -17,8 +20,8 @@ const RegistroGrupal = ({ onClose }) => {
         Nro_session: '',
         ResultadoEsperado: '',
         ComentarioSignificativo: '',
-        NroEstudiantesVarones: '',
-        NroEstudiantesMujeres: '',
+        NroEstudiantesVarones: 0,
+        NroEstudiantesMujeres: 0,
         CumplimientoObjetivo: 'SI',
         InteresDelTema: 'SI',
         ParticipacionAlumnos: 'SI',
@@ -31,6 +34,50 @@ const RegistroGrupal = ({ onClose }) => {
         Evaluacion: '',
         email: auth.user.email,
     });
+    const [codigosEstudiantes, setCodigosEstudiantes] = useState([]);
+
+    // Función para contar por sexo
+    const contarPorSexo = useCallback(async (codigos) => {
+        if (!codigos || codigos.length === 0) {
+            setFormData(prev => ({
+                ...prev,
+                NroEstudiantesVarones: 0,
+                NroEstudiantesMujeres: 0
+            }));
+            return;
+        }
+
+        try {
+            const response = await axios.post('/api/estudiantes/contar-sexo', {
+                codigos: codigos
+            });
+
+            // Verifica la estructura de la respuesta
+            console.log("Respuesta del conteo:", response.data);
+
+            setFormData(prev => ({
+                ...prev,
+                NroEstudiantesVarones: response.data.data?.varones || 0,
+                NroEstudiantesMujeres: response.data.data?.mujeres || 0
+            }));
+        } catch (error) {
+            console.error("Error al contar por sexo:", error);
+        }
+    }, []);
+
+    // Cuando cambian los códigos de estudiantes
+    const handleCodigosChange = useCallback((codigos) => {
+        console.log("Códigos recibidos:", codigos);
+        contarPorSexo(codigos);
+    }, [contarPorSexo]);
+
+    const handleConteoChange = (conteo) => {
+        setFormData(prev => ({
+            ...prev,
+            NroEstudiantesVarones: conteo.varones,
+            NroEstudiantesMujeres: conteo.mujeres
+        }));
+    };
 
     // Obtener el ID del usuario basado en el correo electrónico
     const fetchUsuarioId = async () => {
@@ -98,15 +145,47 @@ const RegistroGrupal = ({ onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
-            await axios.post('/api/registrogrupals', formData);
+            // 1. Convertir asistencias al formato correcto
+            const asistenciasFormateadas = Object.keys(asistencias).map(codigo => ({
+                codigo_alumno: codigo,
+                estado: asistencias[codigo] ? 1 : 0
+            }));
 
-            alert('Atención registrada con éxito.');
+            // 2. Preparar los datos numéricos
+            const datosParaEnviar = {
+                ...formData,
+                user_id: parseInt(formData.user_id),
+                NroEstudiantesVarones: parseInt(formData.NroEstudiantesVarones) || 0,
+                NroEstudiantesMujeres: parseInt(formData.NroEstudiantesMujeres) || 0,
+                Nro_session: parseInt(formData.Nro_session),
+                asistencias: asistenciasFormateadas
+            };
+
+            // 3. Validar que hay asistencias
+            if (asistenciasFormateadas.length === 0) {
+                throw new Error("Debe registrar al menos un estudiante");
+            }
+
+            console.log("Datos finales a enviar:", JSON.stringify(datosParaEnviar, null, 2));
+
+            // 4. Enviar con el header Content-Type correcto
+            const response = await axios.post('/api/asistencia', datosParaEnviar, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            alert('¡Registro exitoso!');
             if (onClose) onClose();
-            return;
-
         } catch (error) {
-            console.error(error);
+            console.error('Error completo:', {
+                message: error.message,
+                response: error.response?.data,
+                requestData: error.config?.data
+            });
+            alert(`Error: ${error.response?.data?.message || error.message}`);
         }
     };
 
@@ -125,6 +204,11 @@ const RegistroGrupal = ({ onClose }) => {
         const m = Math.floor(seconds / 60);
         const s = seconds % 60;
         return `${m}:${s.toString().padStart(2, '0')}`;
+    };
+
+    //------------------------------------------------
+    const handleAsistenciasChange = (nuevasAsistencias) => {
+        setAsistencias(nuevasAsistencias);
     };
 
     return (
@@ -185,12 +269,24 @@ const RegistroGrupal = ({ onClose }) => {
                     <div className="form-group-row">
                         <div className='form-group'>
                             <label>N° Estudiantes Varones:</label>
-                            <input type="number" name="NroEstudiantesVarones" value={formData.NroEstudiantesVarones} onChange={handleChange} />
+                            <input
+                                type="number"
+                                name="NroEstudiantesVarones"
+                                value={formData.NroEstudiantesVarones}
+                                readOnly
+                                className="contador-automatico"
+                            />
                         </div>
 
                         <div className='form-group'>
                             <label>N° Estudiantes Mujeres:</label>
-                            <input type="number" name="NroEstudiantesMujeres" value={formData.NroEstudiantesMujeres} onChange={handleChange} />
+                            <input
+                                type="number"
+                                name="NroEstudiantesMujeres"
+                                value={formData.NroEstudiantesMujeres}
+                                readOnly
+                                className="contador-automatico"
+                            />
                         </div>
                     </div>
 
@@ -335,13 +431,14 @@ const RegistroGrupal = ({ onClose }) => {
                     <div className="my-4 text-center">
                         <p>Escanea este código o ingresa el código manualmente:</p>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <QRCode value={codigoAsistencia} size={230} />
+                            <QRCode value={codigoAsistencia} size={200} />
                             <p className="mt-2 font-mono text-2xl" style={{ fontSize: 28, margin: '16px 0 8px 0' }}>
                                 {codigoAsistencia}
                             </p>
                             <p style={{ fontSize: 18, color: '#555', marginBottom: 8 }}>
                                 Tiempo restante: {formatTime(qrCountdown)}
                             </p>
+
                         </div>
                         <button
                             className="btn btn-secondary"
@@ -352,6 +449,14 @@ const RegistroGrupal = ({ onClose }) => {
                         >
                             Ampliar QR y Código
                         </button>
+
+                        <ListaEstudiantesSesion
+                            codigoAsistencia={codigoAsistencia}
+                            recargarTrigger={recargarTrigger}
+                            onAsistenciasChange={handleAsistenciasChange}
+                            onConteoChange={handleConteoChange}
+                            onCodigosChange={handleCodigosChange}
+                        />
                     </div>
                 )}
             </div>
