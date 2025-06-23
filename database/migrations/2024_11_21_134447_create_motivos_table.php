@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps(); // Campos created_at y updated_at
 
             // Definir la clave foránea
-            $table->foreign('id_categoria')->references('id')->on('categorias')->onDelete('cascade'); // Eliminar en cascada si se borra la categoría
+            $table->foreign('id_categoria')->references('id_categoria')->on('categorias')->onDelete('cascade'); // Eliminar en cascada si se borra la categoría
         });
     }
 

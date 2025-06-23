@@ -12,6 +12,11 @@ class Categoria extends Model
         'descripcion'
     ];
 
+    protected $primaryKey = 'id_categoria';
+    public $incrementing = true;
+    protected $keyType = 'int'; // o 'string' si fuera otro tipo
+
+
     // Relación con la tabla `atencionindividual`
     public function atenciones()
     {

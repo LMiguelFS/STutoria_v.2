@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categorias', function (Blueprint $table) {
-            $table->bigInteger('id_categoria')->primary();
+            $table->id('id_categoria'); // ✅ misma firma que en motivos
             $table->string('descripcion', 255); // Nombre del motivo
             $table->timestamps();
         });
