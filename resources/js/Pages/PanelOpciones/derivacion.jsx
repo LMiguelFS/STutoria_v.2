@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import RegistroAsistencia from '@/Components/RegistroAsistencia';
+import RegistroDerivacion from '@/pages/PanelRegistrar/registroDerivacion';
 import BusquedaAlumno from '../../Components/busquedaAlumnoRI';
 
 const RegistroAsistenciaPage = () => {
@@ -27,7 +27,7 @@ const RegistroAsistenciaPage = () => {
 
             {/* Formulario de asistencia */}
             {!mostrarModal && alumnoSeleccionado && (
-                <RegistroAsistencia codigo_alumno={alumnoSeleccionado.codigo_alumno} />
+                <RegistroDerivacion alumno={alumnoSeleccionado} />
             )}
         </div>
     );

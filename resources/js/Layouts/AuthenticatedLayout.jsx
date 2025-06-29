@@ -17,24 +17,29 @@ export default function AuthenticatedLayout({ header, children }) {
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-30 justify-between">
                         <div className="flex">
-                            <div className="flex shrink-0 items-center ">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                                </Link>
+                            <div className="flex shrink-0 items-center py-2">
+                                <img src="/img/logo50.png" alt="" className="w-30 h-10 " />
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    href={route('dashboard.AdminPsicologo')}
+                                    active={route().current('dashboard.AdminPsicologo')}
                                 >
                                     Dashboard
                                 </NavLink>
+                                <NavLink
+                                    href={route('dashboard.AdminPsicologo')}
+                                    active={route().current('dashboard.AdminPsicologo')}
+                                >
+                                    prueba
+                                </NavLink>
+
                             </div>
                         </div>
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div className="relative ms-3">
+                            <div className="relative ms-3 flex items-center">
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
@@ -61,20 +66,28 @@ export default function AuthenticatedLayout({ header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link
+                                        {/* <Dropdown.Link
                                             href={route('profile.edit')}
                                         >
                                             Profile
-                                        </Dropdown.Link>
+                                        </Dropdown.Link> */}
                                         <Dropdown.Link
                                             href={route('logout')}
                                             method="post"
                                             as="button"
                                         >
-                                            Log Out
+                                            Cerrar sesión
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
+                                <NavLink
+                                    onClick={() => {
+                                        document.documentElement.classList.toggle('dark');
+                                    }}
+                                    className="text-sm text-gray-600 dark:text-gray-300 px-2 py-1 border rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+                                >
+                                    🌙
+                                </NavLink>
                             </div>
                         </div>
 
@@ -129,10 +142,10 @@ export default function AuthenticatedLayout({ header, children }) {
                 >
                     <div className="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
+                            href={route('dashboard.AdminPsicologo')}
+                            active={route().current('dashboard.AdminPsicologo')}
                         >
-                            Dashboard
+                            dashboard.AdminPsicologo
                         </ResponsiveNavLink>
                     </div>
 

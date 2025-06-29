@@ -46,4 +46,9 @@ class Alumno extends Model
         'sexo',
         'PefilEstudiante',
     ];
+
+    public function derivaciones()
+    {
+        return $this->hasMany(Derivacion::class, 'codigo_alumno', 'codigo_alumno');
+    }
 }

@@ -11,6 +11,7 @@ use App\Http\Controllers\ReporteIController;
 use App\Http\Controllers\AtencionGrupalController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\Usercontroller;
+use App\Http\Controllers\DerivacionController;
 use App\Models\Asistencia;
 
 Route::get('/user', function (Request $request) {
@@ -64,6 +65,9 @@ Route::get('/estadisticaatencion/{id_user}', [AtencionindividualController::clas
 
 Route::get('/estadistica/{id_user}', [CategoriaController::class, 'obtenerEstadisticasCategorias']);
 Route::get('/atenciones/proxima-cita', [AtencionIndividualController::class, 'filtrarPorProximaCita']);
+
+//ruta para derivar a un alumno al area e psicologia
+Route::post('/derivaciones', [DerivacionController::class, 'store']);
 
 //---------------------------------------@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-----------------------------
 // APIs para Atención Individual

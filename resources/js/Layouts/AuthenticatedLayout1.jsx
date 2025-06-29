@@ -28,14 +28,20 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div className="flex justify-end">
+                            <div className="flex items-center justify-end gap-2">
                                 <Link href="/">
                                     <ApplicationLogo1 className="block h-9 w-auto fill-current text-gray-800" />
                                 </Link>
+                                {/* Verifica las propiedades correctas */}
+                                {user?.nombres && user?.apellidos && (
+                                    <span className="text-gray-800 font-medium">
+                                        {user.nombres} {user.apellidos}
+                                    </span>
+                                )}
                             </div>
+
+
                             <div className="relative ms-3">
-
-
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
@@ -158,13 +164,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 </div>
             </nav>
 
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        {header}
-                    </div>
-                </header>
-            )}
+
 
             <main>{children}</main>
         </div>

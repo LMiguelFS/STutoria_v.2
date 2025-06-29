@@ -3,7 +3,7 @@ import '../../../css/RegistroGrupalList.css';
 import Registro from "../PanelRegistrar/RegistroAlumno";
 import RegistroIndi from "../PanelRegistrar/registrosessionindividual";
 import RegistroGrupalForm from "../PanelRegistrar/RegistroGrupal";
-import BusquedaAlumno from "../PanelRegistrar/busquedaAlumnoRI";
+import BusquedaAlumno from "../../Components/busquedaAlumnoRI";
 import { usePage } from '@inertiajs/react';
 
 export default function PanelRegistrar() {
