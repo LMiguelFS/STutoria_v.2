@@ -7,6 +7,7 @@ import PanelReportes from '../Pages/PanelOpciones/panelReportes';
 import Notificaciones from '../Pages/PanelOpciones/notificaciones';
 import ModificarD from '../Pages/PanelModificadores/panelGeneralEditacion';
 import Estadistica from '../Pages/Estadistica/panel';
+import Derivacion from '../Pages/PanelOpciones/derivacion';
 
 export default function Dashboard() {
     const [selectedOption, setSelectedOption] = useState('En este apartado podrás crear registros de sesiones individuales, grupales y registrar a alumnos');
@@ -21,13 +22,14 @@ export default function Dashboard() {
             <div className="flex min-h-screen bg-gradient-to-r from-purple-100 via-purple-200 to-purple-300">
                 {/* Sidebar mejorado */}
                 <div className="bg-purple-900 text-white w-20 md:w-44 lg:w-60 p-2 md:p-4 flex flex-col items-center space-y-3 md:space-y-8 shadow-lg min-h-screen transition-all duration-300">
-                    <span className="text-lg font-bold mb-4 hidden md:block">Opciones</span>
+                    <span className="text-lg font-bold mb-0.25 hidden md:block">Opciones</span>
                     {[
                         { label: 'REGISTRAR', img: '/img/GenerarI.png', description: 'En este apartado podrás crear registros de sesiones individuales, grupales y registrar a alumnos' },
                         { label: 'CONSULTAR', img: '/img/Buscar_I.png', description: 'En este apartado podrás buscar registros individuales/grupales o de alumnos y poder modificar o eliminar' },
                         { label: 'NOTIFICAR', img: '/img/notificacion_I.png', description: 'En este apartado podrás buscar sesiones individuales próximas y notificar al estudiante' },
                         { label: 'ESTADÍSTICA', img: '/img/analitica.png', description: 'En este apartado podrás visualizar estadistica de los diferentes analisis de las sesiones de tutoria' },
                         { label: 'REPORTES ', img: '/img/Reporte.png', description: 'En este apartado podrás generar informes grupales e individuales de las sesiones realizadas' },
+                        { label: 'DERIVACIóN ', img: '/img/derivacion.png', description: 'En este apartado podrás derivar a un alumno al area de Psicología' },
                     ].map((option) => (
                         <button
                             key={option.label}
@@ -59,6 +61,7 @@ export default function Dashboard() {
                                 {selectedOption === 'En este apartado podrás buscar sesiones individuales próximas y notificar al estudiante' && <Notificaciones />}
                                 {selectedOption === 'En este apartado podrás buscar registros individuales/grupales o de alumnos y poder modificar o eliminar' && <ModificarD />}
                                 {selectedOption === 'En este apartado podrás visualizar estadistica de los diferentes analisis de las sesiones de tutoria' && <Estadistica />}
+                                {selectedOption === 'En este apartado podrás derivar a un alumno al area de Psicología' && <Derivacion />}
                             </div>
                         </div>
                     </div>

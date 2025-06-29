@@ -31,11 +31,25 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        //$request->authenticate();
+        //$request->session()->regenerate();
+        //return redirect()->route('dashboard');
 
-        $request->session()->regenerate();
+        $credentials = $request->only('email', 'password');
 
-        return redirect()->route('dashboard');
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            if ($user->rol === 'admin' or $user->rol === 'psicologo') {
+                return redirect()->route('dashboard.AdminPsicologo');
+            } elseif ($user->rol === 'tutor') {
+                return redirect()->route('dashboard');
+            }
+        }
+
+        // Si falla la autenticación
+        return back()->withErrors([
+            'email' => 'Las credenciales no coinciden.',
+        ]);
     }
 
     /**

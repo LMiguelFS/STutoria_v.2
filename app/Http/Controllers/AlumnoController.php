@@ -169,6 +169,13 @@ class AlumnoController extends Controller
             'alumnos.codigo_alumno',
             'alumnos.nombre',
             'alumnos.apellidos',
+            'alumnos.correo_institucional',
+            'alumnos.programa_estudios',
+            'alumnos.semestre',
+            'alumnos.estado_civil',
+            'alumnos.edad',
+            'alumnos.celular',
+            'alumnos.sexo',
             'atencionindividuals.numero_atencion',
             DB::raw('(SELECT MAX(numero_atencion) FROM atencionindividuals WHERE codigo_alumno = alumnos.codigo_alumno) as ultima_sesion')
         ])
