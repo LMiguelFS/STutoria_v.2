@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import RegistroDerivacion from '@/pages/PanelRegistrar/registroDerivacion';
+import RegistroDerivacion from '@/Pages/PanelRegistrar/RegistroDerivacion';
 import BusquedaAlumno from '../../Components/busquedaAlumnoRI';
 
 const RegistroAsistenciaPage = () => {
