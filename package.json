@@ -4,6 +4,7 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite"
+        "postinstall": "npm run build"
     },
     "devDependencies": {
         "@headlessui/react": "^2.0.0",
