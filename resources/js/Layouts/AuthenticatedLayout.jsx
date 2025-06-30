@@ -26,15 +26,26 @@ export default function AuthenticatedLayout({ header, children }) {
                                     href={route('dashboard.AdminPsicologo')}
                                     active={route().current('dashboard.AdminPsicologo')}
                                 >
-                                    Dashboard
+                                    Panel de Control
                                 </NavLink>
                                 <NavLink
-                                    href={route('dashboard.AdminPsicologo')}
-                                    active={route().current('dashboard.AdminPsicologo')}
+                                    href={route('GestionUsuarios')}
+                                    active={route().current('GestionUsuarios')}
                                 >
-                                    prueba
+                                    Gestión de Usuarios
                                 </NavLink>
-
+                                <NavLink
+                                    href={route('STutoria')}
+                                    active={route().current('STutoria')}
+                                >
+                                    Sesiones de Tutoría
+                                </NavLink>
+                                <NavLink
+                                    href={route('derivaciones')}
+                                    active={route().current('derivaciones')}
+                                >
+                                    Derivaciones Estudiantiles
+                                </NavLink>
                             </div>
                         </div>
 
@@ -80,14 +91,14 @@ export default function AuthenticatedLayout({ header, children }) {
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
-                                <NavLink
+                                {/* <NavLink
                                     onClick={() => {
                                         document.documentElement.classList.toggle('dark');
                                     }}
                                     className="text-sm text-gray-600 dark:text-gray-300 px-2 py-1 border rounded hover:bg-gray-200 dark:hover:bg-gray-700"
                                 >
                                     🌙
-                                </NavLink>
+                                </NavLink> */}
                             </div>
                         </div>
 

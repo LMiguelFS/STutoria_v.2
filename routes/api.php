@@ -69,6 +69,9 @@ Route::get('/atenciones/proxima-cita', [AtencionIndividualController::class, 'fi
 //ruta para derivar a un alumno al area e psicologia
 Route::post('/derivaciones', [DerivacionController::class, 'store']);
 
+// Ruta para obtener los tutores filtrados por carrera y nombre
+Route::get('/filtrar/tutores', [Usercontroller::class, 'filtrarTutores']);
+
 //---------------------------------------@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-----------------------------
 // APIs para Atención Individual
 Route::prefix('atencionindividuals')->group(function () {

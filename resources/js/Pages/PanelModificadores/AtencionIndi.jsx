@@ -29,9 +29,9 @@ const AtencionIndividualList = () => {
                 },
             });
             setDatos(response.data); // Guarda los datos en el estado
-            console.log("Datos recuperados:", response.data);
+            //console.log("Datos recuperados:", response.data);
         } catch (error) {
-            console.error("Error al obtener datos:", error);
+            console.error("Error al obtener datos:");
         }
     };
 
@@ -40,13 +40,13 @@ const AtencionIndividualList = () => {
             const response = await axios.post(`/api/recuperar-id?email=${auth.user.email}`);
             if (response.data && response.data.id) {
                 const idUser = response.data.id; // ID del usuario
-                console.log("ID del usuario recuperado:", idUser); // Muestra el ID en la consola
+                //console.log("ID del usuario recuperado:", idUser); // Muestra el ID en la consola
                 obtenerDatos(idUser, filtros); // Llama a obtenerDatos con el ID y filtros actuales
             } else {
-                console.error('No se pudo encontrar el ID del usuario.');
+                //console.error('No se pudo encontrar el ID del usuario.');
             }
         } catch (error) {
-            console.error('Error al obtener el ID del usuario:', error);
+            //console.error('Error al obtener el ID del usuario:', error);
         }
     };
 
@@ -79,7 +79,7 @@ const AtencionIndividualList = () => {
                 await axios.delete(`/api/atencionindividuals/${id}`);
                 obtenerDatos(); // Recarga los datos después de eliminar
             } catch (error) {
-                console.error("Error al eliminar el registro:", error);
+                console.error("Error al eliminar el registro:");
             }
         }
     };
@@ -112,7 +112,7 @@ const AtencionIndividualList = () => {
             setFormularioEdicionVisible(false);
             obtenerDatos();
         } catch (error) {
-            console.error("Error al guardar la edición:", error);
+            console.error("Error al guardar la edición:");
         }
         setEditLoading(false);
     };

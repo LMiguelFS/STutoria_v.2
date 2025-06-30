@@ -36,7 +36,7 @@ const estadisticasatencion = () => {
                 return null;
             }
         } catch (error) {
-            console.error('Error al obtener el ID del usuario:', error);
+            //console.error('Error al obtener el ID del usuario:', error);
             setMensaje('Error al obtener el ID del usuario. Intenta de nuevo.');
             return null;
         }
@@ -50,7 +50,7 @@ const estadisticasatencion = () => {
                 const response = await axios.get(`/api/estadisticaatencion/${userId}`);
                 setEstadisticas(response.data);
             } catch (error) {
-                console.error('Error al obtener las estadísticas:', error);
+                //console.error('Error al obtener las estadísticas:', error);
                 setMensaje('No se pudieron cargar las estadísticas.');
             }
         };
