@@ -31,26 +31,21 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        //$request->authenticate();
-        //$request->session()->regenerate();
-        //return redirect()->route('dashboard');
+        $request->authenticate();
+        $request->session()->regenerate();
 
-        $credentials = $request->only('email', 'password');
+        $user = Auth::user();
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            if ($user->rol === 'admin' or $user->rol === 'psicologo') {
-                return redirect()->route('dashboard.AdminPsicologo');
-            } elseif ($user->rol === 'tutor') {
-                return redirect()->route('dashboard');
-            }
+        if ($user->rol === 'admin' || $user->rol === 'psicologo') {
+            return redirect()->route('dashboard.AdminPsicologo');
+        } elseif ($user->rol === 'tutor') {
+            return redirect()->route('dashboard');
         }
 
-        // Si falla la autenticación
-        return back()->withErrors([
-            'email' => 'Las credenciales no coinciden.',
-        ]);
+        // Opción por defecto si el rol no coincide
+        return redirect()->route('dashboard');
     }
+
 
     /**
      * Destroy an authenticated session.

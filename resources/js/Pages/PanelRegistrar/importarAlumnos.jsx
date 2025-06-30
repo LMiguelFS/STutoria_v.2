@@ -55,7 +55,7 @@ const ImportarAlumnos = ({ onImport, onClose }) => {
 
             const alumnosArray = Array.isArray(alumnosData) ? alumnosData : [alumnosData];
 
-            console.log('Datos recibidos para importación:', alumnosArray);
+            //console.log('Datos recibidos para importación:', alumnosArray);
 
             // 2. Transformación segura de datos
             const alumnosParaEnviar = alumnosArray
@@ -87,7 +87,7 @@ const ImportarAlumnos = ({ onImport, onClose }) => {
                 throw new Error('No hay registros válidos para importar');
             }
 
-            console.log('Datos a enviar al servidor:', { alumnos: alumnosValidos });
+            //console.log('Datos a enviar al servidor:', { alumnos: alumnosValidos });
 
             // 4. Envío al servidor
             const response = await axios.post('/api/alumnos/import', {

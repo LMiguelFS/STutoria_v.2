@@ -21,6 +21,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard-Admin', function () {
         return Inertia::render('DashboardAdmin');
     })->name('dashboard.AdminPsicologo');
+
+    Route::get('/prueba', function () {
+        return Inertia::render('Admin/GestionUsuarios');
+    })->name('GestionUsuarios');
+
+    Route::get('/tutoria', function () {
+        return Inertia::render('Admin/SesionesTutoria');
+    })->name('STutoria');
+
+    Route::get('/derivaciones', function () {
+        return Inertia::render('Admin/Derivaciones');
+    })->name('derivaciones');
 });
 
 
@@ -28,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/asistencia', function () {
     return Inertia::render('Asistencia/RegistroAsistenciaPage');
 });
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

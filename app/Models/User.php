@@ -23,7 +23,8 @@ class User extends Authenticatable
         'celular',
         'email',
         'password',
-        'rol'
+        'rol',
+        'programa_estudios'
     ];
 
     /**

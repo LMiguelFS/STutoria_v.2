@@ -26,4 +26,29 @@ class Usercontroller extends Controller
 
         return response()->json(['id' => $usuario->id]);
     }
+
+    public function filtrarTutores(Request $request)
+    {
+        $carrera = $request->input('carrera');
+        $nombre = $request->input('nombre');
+
+        $query = DB::table('users')
+            ->select('id', 'nombres', 'apellidos', 'programa_estudios')
+            ->where('rol', 'tutor'); // Siempre filtra por tutor
+
+        if ($carrera && $carrera !== 'Todos') {
+            $query->where('programa_estudios', $carrera);
+        }
+
+        if ($nombre) {
+            $query->where(function ($q) use ($nombre) {
+                $q->where('nombres', 'like', '%' . $nombre . '%')
+                    ->orWhere('apellidos', 'like', '%' . $nombre . '%');
+            });
+        }
+
+        $tutores = $query->get();
+
+        return response()->json($tutores);
+    }
 }

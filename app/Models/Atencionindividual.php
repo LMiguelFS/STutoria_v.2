@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Alumno;
 class Atencionindividual extends Model
 {
     /** @use HasFactory<\Database\Factories\AtencionindividualFactory> */
@@ -33,7 +33,7 @@ class Atencionindividual extends Model
     // Relación con la tabla `alumno`
     public function alumnos()
     {
-        return $this->belongsTo(Alumnos::class, 'codigo_alumno', 'codigo_alumno');
+        return $this->belongsTo(Alumno::class, 'codigo_alumno', 'codigo_alumno');
     }
 
     // Relación con la tabla `categoria`
