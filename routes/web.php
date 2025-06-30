@@ -10,7 +10,7 @@ use App\Http\Controllers\AtencionGrupalController;
 
 Route::get('/', function () {
     return Inertia::render('Auth/Login'); // Especifica el directorio Auth
-})->name('login');
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     //Dashboard route para tutor
