@@ -91,11 +91,11 @@ export default function FiltrarTutor({ onSeleccionarTutor }) {
             </div>
 
             {/* Contador de resultados */}
-            <div className="px-6 py-3 bg-gray-50 border-b">
-                <p className="text-sm text-gray-600">
+            <div className="px-6 py-3 bg-gray-800 border-b">
+                <p className="text-sm text-gray-200">
                     {loading ? 'Cargando...' : `${tutoresFiltrados.length} tutor${tutoresFiltrados.length !== 1 ? 'es' : ''} encontrado${tutoresFiltrados.length !== 1 ? 's' : ''}`}
                     {filtros.carrera !== 'Todos' && (
-                        <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                        <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-900 text-indigo-100">
                             {carreras.find(c => c.value === filtros.carrera)?.label}
                         </span>
                     )}
@@ -104,21 +104,21 @@ export default function FiltrarTutor({ onSeleccionarTutor }) {
 
             {/* Tabla de tutores */}
             <div className="overflow-x-auto">
-                <table className="w-full">
-                    <thead className="bg-gray-100">
+                <table className="w-full bg-gray-900 text-gray-100">
+                    <thead className="bg-gray-800">
                         <tr>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                                 Tutor
                             </th>
-                            <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                                 Programa
                             </th>
-                            <th className="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-2 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
                                 Acciones
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-100">
+                    <tbody className="bg-gray-900 divide-y divide-gray-800">
                         {loading ? (
                             <tr>
                                 <td colSpan="3" className="px-6 py-12 text-center">
@@ -138,7 +138,7 @@ export default function FiltrarTutor({ onSeleccionarTutor }) {
                                                 </div>
                                             </div>
                                             <div className="ml-4">
-                                                <div className="text-sm font-medium text-gray-900">
+                                                <div className="text-sm font-medium text-blue-600">
                                                     {tutor.nombres} {tutor.apellidos}
                                                 </div>
                                             </div>
@@ -182,8 +182,8 @@ export default function FiltrarTutor({ onSeleccionarTutor }) {
 
             {/* Footer con información adicional */}
             {tutoresFiltrados.length > 0 && (
-                <div className="bg-gray-50 px-6 py-3 border-t">
-                    <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="bg-gray-800 px-6 py-3 border-t">
+                    <div className="flex items-center justify-between text-sm text-gray-300">
                         <span>Total de registros: {tutoresFiltrados.length}</span>
                     </div>
                 </div>

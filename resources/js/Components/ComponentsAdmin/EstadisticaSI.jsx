@@ -236,10 +236,11 @@ const EstadisticasAtencion = ({ tutorId }) => {
         <div className="h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-lg overflow-hidden">
             {/* Header */}
             <div className="px-4 py-3 bg-gray-800/50 border-b border-gray-700">
-                <h3 className="text-white font-semibold text-sm mb-2 ">Tutorias Individuales</h3>
 
                 {/* Tabs de navegación */}
-                <div className="flex space-x-1">
+                <div className="flex space-x-5">
+                    <h3 className="text-white font-semibold text-sm mb-2 ">Tutorias Individuales</h3>
+
                     {chartTypes.map((chart) => (
                         <button
                             key={chart.key}
@@ -256,8 +257,8 @@ const EstadisticasAtencion = ({ tutorId }) => {
                 </div>
             </div>
 
-            {/* Chart Container */}
-            <div className="p-4 h-55">
+            {/* Chart Container (Modificar el tamaño del panel)*/}
+            <div className="p-4 ">
                 {renderSelectedChart()}
             </div>
 
