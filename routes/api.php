@@ -71,7 +71,12 @@ Route::post('/derivaciones', [DerivacionController::class, 'store']);
 
 // Ruta para obtener los tutores filtrados por carrera y nombre
 Route::get('/filtrar/tutores', [Usercontroller::class, 'filtrarTutores']);
-
+//Ruta para obtener cantidad de tutorias grupales por fecha
+Route::get('/estadisticaGrupal/por-fecha/{user_id}', [AtencionGrupalController::class, 'contarSesionesPorFecha']);
+// Ruta para obtener los temas grupales
+Route::get('/temas-grupales/{user_id}', [AtencionGrupalController::class, 'listarTemas']);
+// Ruta para obtener la cantidad de alumnos(mujeres y varones) por tema
+Route::match(['GET', 'POST'], '/cantidad-alumnos-sesion/{id?}', [AtencionGrupalController::class, 'cantidadAlumnosPorTema']);
 //---------------------------------------@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-----------------------------
 // APIs para Atención Individual
 Route::prefix('atencionindividuals')->group(function () {

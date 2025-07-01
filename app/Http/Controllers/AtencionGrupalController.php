@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\registrogrupal;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\DB;
 
 class AtencionGrupalController extends Controller
 {
@@ -125,5 +122,70 @@ class AtencionGrupalController extends Controller
         $userId = $request->query('user_id');
         $count = RegistroGrupal::where('user_id', $userId)->count();
         return response()->json(['count' => $count]);
+    }
+
+    public function contarSesionesPorFecha(Request $request, $user_id)
+    {
+        $resultados = DB::table('registrogrupals')
+            ->select('Fecha', DB::raw('COUNT(*) as cantidad'))
+            ->where('user_id', $user_id)
+            ->groupBy('Fecha')
+            ->orderBy('Fecha')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'Fecha' => $item->Fecha,
+                    'Cantidad' => $item->cantidad,
+                ];
+            });
+        return response()->json($resultados);
+    }
+
+    public function listarTemas($user_id)
+    {
+        $temas = DB::table('registrogrupals')
+            ->select('id', 'Tema')
+            ->where('user_id', $user_id)
+            ->orderBy('Tema')
+            ->get();
+
+        return response()->json($temas);
+    }
+
+    public function cantidadAlumnosPorTema(Request $request, $id = null)
+    {
+        // Permite recibir un solo id por ruta o un array de ids por query/body
+        $ids = $id ? [$id] : $request->input('ids', []);
+
+        if (empty($ids)) {
+            return response()->json(['error' => 'Debe proporcionar al menos un id'], 400);
+        }
+
+        $sesiones = DB::table('registrogrupals')
+            ->select('id', 'Tema', 'Fecha', 'NroEstudiantesVarones', 'NroEstudiantesMujeres')
+            ->whereIn('id', $ids)
+            ->get();
+
+        if ($sesiones->isEmpty()) {
+            return response()->json(['error' => 'Sesión(es) no encontrada(s)'], 404);
+        }
+
+        // Si solo es un id, devuelve un solo objeto, si son varios, un array
+        $resultados = $sesiones->map(function ($sesion) {
+            $total = ($sesion->NroEstudiantesVarones ?? 0) + ($sesion->NroEstudiantesMujeres ?? 0);
+            return [
+                'tema' => $sesion->Tema,
+                'fecha' => $sesion->Fecha,
+                'varones' => $sesion->NroEstudiantesVarones,
+                'mujeres' => $sesion->NroEstudiantesMujeres,
+                'total' => $total,
+            ];
+        });
+
+        // Si solo hay un resultado y se pidió un solo id, devuelve objeto, si no, array
+        if (count($resultados) === 1) {
+            return response()->json($resultados->first());
+        }
+        return response()->json($resultados);
     }
 }
