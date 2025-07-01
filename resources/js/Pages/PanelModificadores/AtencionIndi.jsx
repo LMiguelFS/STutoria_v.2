@@ -185,7 +185,7 @@ const AtencionIndividualList = () => {
                                             <td>{registro.descripcion_consulta}</td>
                                             <td>{registro.acuerdos_establecidos}</td>
                                             <td>
-                                                <button
+                                                {/* <button
                                                     onClick={() => eliminarRegistro(registro.id)}
                                                     title="Eliminar"
                                                     style={{
@@ -210,9 +210,9 @@ const AtencionIndividualList = () => {
                                                         <path d="M14 11v6" />
                                                         <path d="M9 6V4h6v2" />
                                                     </svg>
-                                                </button>
+                                                </button> */}
 
-                                                <button
+                                                {/* <button
                                                     onClick={() => editarRegistro(registro.id)}
                                                     title="Editar"
                                                     style={{
@@ -233,7 +233,32 @@ const AtencionIndividualList = () => {
                                                         <path d="M12 20h9" />
                                                         <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
                                                     </svg>
+                                                </button> */}
+
+                                                 <button
+                                                    onClick={() => editarRegistro(registro.id)}
+                                                    title="Mas detalles"
+                                                    style={{
+                                                        backgroundColor: "#74c0fc", 
+                                                        border: "none",
+                                                        borderRadius: "6px",
+                                                        padding: "6px 10px",
+                                                        cursor: "pointer",
+                                                        transition: "background-color 0.3s",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center"
+                                                    }}
+                                                    onMouseOver={e => e.currentTarget.style.backgroundColor = "#4dabf7"}
+                                                    onMouseOut={e => e.currentTarget.style.backgroundColor = "#74c0fc"}
+                                                >
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                    <circle cx="12" cy="12" r="3" />
+                                                    </svg>
+
                                                 </button>
+
                                             </td>
                                         </tr>
                                     ))
@@ -248,7 +273,7 @@ const AtencionIndividualList = () => {
 
                     {registroEditar && formularioEdicionVisible && (
                         <div className="formulario-edicion">
-                            <h3>Editar Atención</h3>
+                            {/* <h3>Editar Atención</h3> */}
                             <form onSubmit={guardarEdicion}>
                                 <label>
                                     Fecha Atención:
@@ -277,6 +302,7 @@ const AtencionIndividualList = () => {
                                         name="numero_atencion"
                                         value={registroEditar.numero_atencion}
                                         onChange={manejarCambioEdicion}
+                                        disabled
                                     />
                                 </label>
                                 <label>
@@ -286,6 +312,7 @@ const AtencionIndividualList = () => {
                                         name="descripcion_consulta"
                                         value={registroEditar.descripcion_consulta}
                                         onChange={manejarCambioEdicion}
+                                        disabled
                                     />
                                 </label>
                                 <label>
@@ -295,6 +322,7 @@ const AtencionIndividualList = () => {
                                         name="acuerdos_establecidos"
                                         value={registroEditar.acuerdos_establecidos}
                                         onChange={manejarCambioEdicion}
+                                        disabled
                                     />
                                 </label>
                                 <label>
@@ -304,6 +332,7 @@ const AtencionIndividualList = () => {
                                         name="proxima_cita"
                                         value={registroEditar.proxima_cita}
                                         onChange={manejarCambioEdicion}
+                                        disabled
 
                                     />
                                 </label>
@@ -314,13 +343,14 @@ const AtencionIndividualList = () => {
                                         name="observaciones"
                                         value={registroEditar.observaciones}
                                         onChange={manejarCambioEdicion}
+                                        disabled
                                     />
                                 </label>
 
 
-                                <button type="submit" disabled={editLoading}>
+                                {/* <button type="submit" disabled={editLoading}>
                                     {editLoading ? "Guardando..." : "Guardar Cambios"}
-                                </button>
+                                </button> */}
 
                             </form>
                         </div>
