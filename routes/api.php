@@ -77,6 +77,11 @@ Route::get('/estadisticaGrupal/por-fecha/{user_id}', [AtencionGrupalController::
 Route::get('/temas-grupales/{user_id}', [AtencionGrupalController::class, 'listarTemas']);
 // Ruta para obtener la cantidad de alumnos(mujeres y varones) por tema
 Route::match(['GET', 'POST'], '/cantidad-alumnos-sesion/{id?}', [AtencionGrupalController::class, 'cantidadAlumnosPorTema']);
+
+// GET y POST en la misma ruta
+Route::match(['get', 'post'], '/derivaciones/estadisticas', [DerivacionController::class, 'derivacionesPorCarreraYCiclo']);
+//Ruta para mostrar lista de derivaciones
+Route::post('/list-derivaciones', [DerivacionController::class, 'getDerivacionesByCodigo']);
 //---------------------------------------@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-----------------------------
 // APIs para Atención Individual
 Route::prefix('atencionindividuals')->group(function () {

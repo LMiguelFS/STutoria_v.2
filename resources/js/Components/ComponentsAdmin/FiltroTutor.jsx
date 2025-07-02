@@ -52,7 +52,7 @@ export default function FiltrarTutor({ onSeleccionarTutor }) {
                     <div className="flex items-end gap-2">
                         <div className="flex-1">
                             <label className="block text-sm font-medium text-indigo-100 mb-2">
-                                Carrera o Programa
+                                Programas de estudios
                             </label>
                             <select
                                 value={filtros.carrera}
@@ -118,7 +118,7 @@ export default function FiltrarTutor({ onSeleccionarTutor }) {
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="bg-gray-900 divide-y divide-gray-800">
+                    <tbody className="bg-gray-900 divide-y ">
                         {loading ? (
                             <tr>
                                 <td colSpan="3" className="px-6 py-12 text-center">
@@ -127,7 +127,7 @@ export default function FiltrarTutor({ onSeleccionarTutor }) {
                             </tr>
                         ) : tutoresFiltrados.length > 0 ? (
                             tutoresFiltrados.map((tutor) => (
-                                <tr key={tutor.id} className="hover:bg-gray-50 transition-colors duration-150">
+                                <tr key={tutor.id} className="hover:bg-gray-600 transition-colors duration-150">
                                     <td className=" px-2 py-1">
                                         <div className="flex items-center">
                                             <div className="flex-shrink-0 h-10 w-10">
@@ -138,7 +138,7 @@ export default function FiltrarTutor({ onSeleccionarTutor }) {
                                                 </div>
                                             </div>
                                             <div className="ml-4">
-                                                <div className="text-sm font-medium text-blue-600">
+                                                <div className="text-sm font-medium text-while-700">
                                                     {tutor.nombres} {tutor.apellidos}
                                                 </div>
                                             </div>
