@@ -12,7 +12,7 @@ export default function STutoria({ }) {
     const [idsSeleccionados, setIdsSeleccionados] = useState([]);
     return (
         <AuthenticatedLayout>
-            <Head title="GUsuarios" />
+            <Head title="STutorias" />
 
             <div className="p-3 grid grid-cols-1 md:grid-cols-4 gap-3 ">
                 {/* === FILTRO (Columna izquierda) === */}

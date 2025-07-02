@@ -44,7 +44,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                     href={route('derivaciones')}
                                     active={route().current('derivaciones')}
                                 >
-                                    Derivaciones Estudiantiles
+                                    Derivaciones/Referencias
                                 </NavLink>
                             </div>
                         </div>
