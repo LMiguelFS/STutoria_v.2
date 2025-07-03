@@ -115,8 +115,12 @@ const RegistroGrupal = ({ onClose }) => {
     };
 
     useEffect(() => {
-        const today = new Date().toISOString().slice(0, 10);
-        setFormData((prev) => ({ ...prev, Fecha: today }));
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const localDate = `${yyyy}-${mm}-${dd}`;
+        setFormData((prev) => ({ ...prev, Fecha: localDate }));
         fetchUsuarioId();
         fetchCodigoAsistencia();
     }, []);

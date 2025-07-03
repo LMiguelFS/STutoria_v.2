@@ -9,8 +9,16 @@ const RegistroAtencion = ({ alumno, onClose }) => {
     //------------------------------------------------
     const { auth } = usePage().props;
     //------------------------------------------------
+    const getLocalDate = () => {
+        const hoy = new Date();
+        const yyyy = hoy.getFullYear();
+        const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dd = String(hoy.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+    };
+
     const [formData, setFormData] = useState({
-        fecha_atencion: new Date().toISOString().split('T')[0],
+        fecha_atencion: getLocalDate(),
         numero_atencion: alumno?.proxima_sesion,
         descripcion_consulta: '',
         acuerdos_establecidos: '',

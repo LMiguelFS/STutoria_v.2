@@ -50,7 +50,7 @@ export default function EstadisticaSG({ tutorId }) {
 
     // Función para formatear la fecha
     const formatearFecha = (fechaString) => {
-        const fecha = new Date(fechaString);
+        const fecha = new Date(fechaString + 'T00:00:00');
         const meses = [
             'ene', 'feb', 'mar', 'abr', 'may', 'jun',
             'jul', 'ago', 'sep', 'oct', 'nov', 'dic'
