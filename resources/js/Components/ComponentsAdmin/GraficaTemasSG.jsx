@@ -37,7 +37,7 @@ export default function GraficaTemasSG({ ids }) {
 
     // Función para formatear la fecha
     const formatearFecha = (fechaString) => {
-        const fecha = new Date(fechaString);
+        const fecha = new Date(fechaString + 'T00:00:00');
         const meses = [
             'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
             'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
@@ -47,21 +47,24 @@ export default function GraficaTemasSG({ ids }) {
         return `${dia} ${mes}`;
     };
 
+    // Ordena los datos por fecha (menor a mayor)
+    const datosOrdenados = [...datos].sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+
     // Eje X: Tema (fecha)
-    const labels = datos.map(item => `${item.tema} (${formatearFecha(item.fecha)})`);
+    const labels = datosOrdenados.map(item => `${item.tema} (${formatearFecha(item.fecha)})`);
 
     const chartData = {
         labels,
         datasets: [
             {
                 label: "Varones",
-                data: datos.map(item => item.varones),
+                data: datosOrdenados.map(item => item.varones),
                 backgroundColor: "#60a5fa",
                 stack: "Stack 0",
             },
             {
                 label: "Mujeres",
-                data: datos.map(item => item.mujeres),
+                data: datosOrdenados.map(item => item.mujeres),
                 backgroundColor: "#a78bfa",
                 stack: "Stack 0",
             },

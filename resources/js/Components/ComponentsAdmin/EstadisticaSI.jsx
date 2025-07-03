@@ -131,16 +131,21 @@ const EstadisticasAtencion = ({ tutorId }) => {
     const frecuenciaPorCategoria = (estadisticas.frecuencia_por_categoria || []).filter((item) => item.frecuencia > 0);
     const relacionAtenciones = estadisticas.relacion_atenciones || [];
 
+    // Ordenar por fecha ascendente
+    const atencionesPorFechaOrdenadas = [...atencionesPorFecha].sort(
+        (a, b) => new Date(a.fecha) - new Date(b.fecha)
+    );
+
     // Datos para gráfico de línea (por fecha)
     const datosAtencionesFecha = {
-        labels: atencionesPorFecha.map((item) => {
+        labels: atencionesPorFechaOrdenadas.map((item) => {
             const fecha = new Date(item.fecha + 'T00:00:00');
             return fecha.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' });
         }),
         datasets: [
             {
                 label: 'Atenciones',
-                data: atencionesPorFecha.map((item) => item.cantidad),
+                data: atencionesPorFechaOrdenadas.map((item) => item.cantidad),
                 borderColor: '#60a5fa',
                 backgroundColor: 'rgba(96, 165, 250, 0.1)',
                 borderWidth: 2,

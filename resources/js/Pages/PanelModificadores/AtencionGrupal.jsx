@@ -141,7 +141,7 @@ const RegistroGrupalList = () => {
                             className="filtro-input"
                         />
                     </label>
-                    <label className="filtro-label">
+                    {/* <label className="filtro-label">
                         Nro_session:
                         <input
                             type="number"
@@ -150,7 +150,7 @@ const RegistroGrupalList = () => {
                             onChange={manejarCambio}
                             className="filtro-input"
                         />
-                    </label>
+                    </label> */}
                     <button onClick={aplicarFiltros} className="filtro-boton">
                         Filtrar
                     </button>
@@ -293,17 +293,17 @@ const RegistroGrupalList = () => {
                                     type="button"
                                     onClick={() => setMostrarCamposExtra(!mostrarCamposExtra)}
                                     style={{
-                                         margin: '12px 0',
-        backgroundColor: '#dec5e3',
-        border: '2px solid purple',
-        color: '#1a1a1a',
-        padding: '10px',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        fontSize: '14px',
-        width: '100%', // ✅ para que no se salga
-        boxSizing: 'border-box', // ✅ que respete padding
-        textAlign: 'center' // ✅ alinear texto centrado
+                                        margin: '12px 0',
+                                        backgroundColor: '#dec5e3',
+                                        border: '2px solid purple',
+                                        color: '#1a1a1a',
+                                        padding: '10px',
+                                        borderRadius: '8px',
+                                        cursor: 'pointer',
+                                        fontSize: '14px',
+                                        width: '100%', // ✅ para que no se salga
+                                        boxSizing: 'border-box', // ✅ que respete padding
+                                        textAlign: 'center' // ✅ alinear texto centrado
                                     }}
                                 >
                                     {mostrarCamposExtra ? 'Ocultar campos secundarios' : 'Mostrar campos secundarios'}
