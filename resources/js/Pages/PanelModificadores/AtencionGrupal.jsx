@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../../css/RegistroGrupalList.css";
-//-------------------------------------------
 import { usePage } from '@inertiajs/react';
-//-------------------------------------------
+
 const RegistroGrupalList = () => {
-    //------------------------------------------------
     const { auth } = usePage().props;
-    //------------------------------------------------
+
     const [filtros, setFiltros] = useState({
         Fecha: "",
         Tema: "",
@@ -16,16 +14,17 @@ const RegistroGrupalList = () => {
     const [datos, setDatos] = useState([]);
     const [loading, setLoading] = useState(false);
     const [registroEditar, setRegistroEditar] = useState(null);
-    const [formularioEdicionVisible, setFormularioEdicionVisible] = useState(false); // Nuevo estado
-    const [userId, setUserId] = useState(null); // Nuevo estado para guardar el id del usuario
+    const [formularioEdicionVisible, setFormularioEdicionVisible] = useState(false);
+    const [userId, setUserId] = useState(null);
+    const [mostrarCamposExtra, setMostrarCamposExtra] = useState(false); // Nuevo estado
 
     const fetchUsuarioId = async () => {
         try {
             const response = await axios.post(`/api/recuperar-id?email=${auth.user.email}`);
             if (response.data && response.data.id) {
                 const idUser = response.data.id;
-                setUserId(idUser); // Guarda el id en el estado
-                obtenerDatos(idUser, false); // Llama a obtenerDatos sin filtros al inicio
+                setUserId(idUser);
+                obtenerDatos(idUser, false);
             } else {
                 console.error('No se pudo encontrar el ID del usuario.');
             }
@@ -34,7 +33,6 @@ const RegistroGrupalList = () => {
         }
     };
 
-    // Modifica obtenerDatos para aceptar userId y filtros
     const obtenerDatos = async (userId, applyFilters = false) => {
         setLoading(true);
         try {
@@ -55,7 +53,7 @@ const RegistroGrupalList = () => {
     };
 
     useEffect(() => {
-        fetchUsuarioId(); // Llama a fetchUsuarioId al montar el componente
+        fetchUsuarioId();
     }, []);
 
     const manejarCambio = (e) => {
@@ -68,7 +66,7 @@ const RegistroGrupalList = () => {
 
     const aplicarFiltros = () => {
         if (userId) {
-            obtenerDatos(userId, true); // Pasa el userId y activa los filtros
+            obtenerDatos(userId, true);
         }
     };
 
@@ -76,7 +74,7 @@ const RegistroGrupalList = () => {
         if (window.confirm("¿Estás seguro de eliminar este registro?")) {
             try {
                 await axios.delete(`api/registrogrupals/${id}`);
-                if (userId) obtenerDatos(userId, false); // Recarga los datos después de eliminar
+                if (userId) obtenerDatos(userId, false);
             } catch (error) {
                 console.error("Error al eliminar el registro:", error);
             }
@@ -85,8 +83,8 @@ const RegistroGrupalList = () => {
 
     const editarRegistro = async (id) => {
         const registro = datos.find((item) => item.id === id);
-        setRegistroEditar(registro); // Establecer el registro a editar
-        setFormularioEdicionVisible(true); // Mostrar formulario de edición
+        setRegistroEditar(registro);
+        setFormularioEdicionVisible(true);
     };
 
     const manejarCambioEdicion = (e) => {
@@ -103,22 +101,20 @@ const RegistroGrupalList = () => {
             await axios.put(`api/registrogrupals/${registroEditar.id}`, registroEditar);
             setRegistroEditar(null);
             setFormularioEdicionVisible(false);
-            if (userId) obtenerDatos(userId, false); // Recargar los datos después de editar
+            if (userId) obtenerDatos(userId, false);
         } catch (error) {
             console.error("Error al guardar la edición:", error);
         }
     };
 
     const volverAlFiltro = () => {
-        setFormularioEdicionVisible(false); // Ocultar formulario de edición
+        setFormularioEdicionVisible(false);
     };
 
     return (
         <div style={styles.container}>
             <h2 className="titulo">Lista de Registros Grupales</h2>
 
-
-            {/* Botón para volver al panel de filtrado */}
             {formularioEdicionVisible ? (
                 <button onClick={volverAlFiltro} className="volver-filtro">
                     Volver al Panel de Filtro
@@ -153,7 +149,6 @@ const RegistroGrupalList = () => {
                             value={filtros.Nro_session}
                             onChange={manejarCambio}
                             className="filtro-input"
-
                         />
                     </label>
                     <button onClick={aplicarFiltros} className="filtro-boton">
@@ -162,7 +157,6 @@ const RegistroGrupalList = () => {
                 </div>
             )}
 
-            {/* Mostrar la tabla solo si el formulario de edición está oculto */}
             {!formularioEdicionVisible && loading ? (
                 <p className="loading-text">Cargando datos...</p>
             ) : (
@@ -192,37 +186,10 @@ const RegistroGrupalList = () => {
                                             <td>{registro.CumplimientoObjetivo}</td>
                                             <td>
                                                 <button
-                                                    onClick={() => eliminarRegistro(registro.id)}
-                                                    title="Eliminar"
-                                                    style={{
-                                                        backgroundColor: "#ff8787", // Rojo
-                                                        border: "none",
-                                                        borderRadius: "6px",
-                                                        padding: "6px 10px",
-                                                        marginRight: "8px",
-                                                        cursor: "pointer",
-                                                        transition: "background-color 0.3s",
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        justifyContent: "center"
-                                                    }}
-                                                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#ff6b6b"}
-                                                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#ff8787"}
-                                                >
-                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <polyline points="3 6 5 6 21 6" />
-                                                        <path d="M19 6l-1 14H6L5 6" />
-                                                        <path d="M10 11v6" />
-                                                        <path d="M14 11v6" />
-                                                        <path d="M9 6V4h6v2" />
-                                                    </svg>
-                                                </button>
-
-                                                <button
                                                     onClick={() => editarRegistro(registro.id)}
-                                                    title="Editar"
+                                                    title="Mas detalles"
                                                     style={{
-                                                        backgroundColor: "#ffe066", // Amarillo
+                                                        backgroundColor: "#74c0fc",
                                                         border: "none",
                                                         borderRadius: "6px",
                                                         padding: "6px 10px",
@@ -232,15 +199,14 @@ const RegistroGrupalList = () => {
                                                         alignItems: "center",
                                                         justifyContent: "center"
                                                     }}
-                                                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#ffd43b"}
-                                                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#ffe066"}
+                                                    onMouseOver={e => e.currentTarget.style.backgroundColor = "#4dabf7"}
+                                                    onMouseOut={e => e.currentTarget.style.backgroundColor = "#74c0fc"}
                                                 >
                                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <path d="M12 20h9" />
-                                                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                        <circle cx="12" cy="12" r="3" />
                                                     </svg>
                                                 </button>
-
                                             </td>
                                         </tr>
                                     ))
@@ -253,147 +219,67 @@ const RegistroGrupalList = () => {
                         </table>
                     )}
 
-                    {/* Formulario de Edición */}
                     {registroEditar && formularioEdicionVisible && (
                         <div className="formulario-edicion">
                             <h3>Editar Registro</h3>
                             <form onSubmit={guardarEdicion}>
-                                <label>
-                                    Fecha:
-                                    <input
-                                        type="date"
-                                        name="Fecha"
-                                        value={registroEditar.Fecha}
-                                        onChange={manejarCambioEdicion}
-                                        disabled
-                                    />
+                                <label>Fecha:
+                                    <input type="date" name="Fecha" value={registroEditar.Fecha} onChange={manejarCambioEdicion} disabled />
                                 </label>
-                                <label>
-                                    Tema:
-                                    <input
-                                        type="text"
-                                        name="Tema"
-                                        value={registroEditar.Tema}
-                                        onChange={manejarCambioEdicion}
-                                    />
+                                <label>Tema:
+                                    <input type="text" name="Tema" value={registroEditar.Tema} onChange={manejarCambioEdicion} disabled />
                                 </label>
-                                <label>
-                                    Nro_session:
-                                    <input
-                                        type="number"
-                                        name="Nro_session"
-                                        value={registroEditar.Nro_session}
-                                        onChange={manejarCambioEdicion}
-                                        disabled
-                                    />
+                                <label>Nro_session:
+                                    <input type="number" name="Nro_session" value={registroEditar.Nro_session} onChange={manejarCambioEdicion} disabled />
                                 </label>
-                                <label>
-                                    ResultadoEsperado:
-                                    <input
-                                        type="text"
-                                        name="ResultadoEsperado"
-                                        value={registroEditar.ResultadoEsperado}
-                                        onChange={manejarCambioEdicion}
-                                    />
+                                <label>ResultadoEsperado:
+                                    <input type="text" name="ResultadoEsperado" value={registroEditar.ResultadoEsperado} onChange={manejarCambioEdicion} disabled />
                                 </label>
-                                <label>
-                                    ComentarioSignificativo:
-                                    <input
-                                        type="text"
-                                        name="ComentarioSignificativo"
-                                        value={registroEditar.ComentarioSignificativo}
-                                        onChange={manejarCambioEdicion}
-                                    />
+                                <label>ComentarioSignificativo:
+                                    <input type="text" name="ComentarioSignificativo" value={registroEditar.ComentarioSignificativo} onChange={manejarCambioEdicion} disabled />
                                 </label>
-                                <label>
-                                    NroEstudiantesVarones:
-                                    <input
-                                        type="number"
-                                        name="NroEstudiantesVarones"
-                                        value={registroEditar.NroEstudiantesVarones}
-                                        onChange={manejarCambioEdicion}
-                                        disabled
-                                    />
+                                <label>NroEstudiantesVarones:
+                                    <input type="number" name="NroEstudiantesVarones" value={registroEditar.NroEstudiantesVarones} onChange={manejarCambioEdicion} disabled />
                                 </label>
-                                <label>
-                                    NroEstudiantesMujeres:
-                                    <input
-                                        type="number"
-                                        name="NroEstudiantesMujeres"
-                                        value={registroEditar.NroEstudiantesMujeres}
-                                        onChange={manejarCambioEdicion}
-                                        disabled
-                                    />
+                                <label>NroEstudiantesMujeres:
+                                    <input type="number" name="NroEstudiantesMujeres" value={registroEditar.NroEstudiantesMujeres} onChange={manejarCambioEdicion} disabled />
                                 </label>
+
                                 <div className="panel-promo">
-                                    <label>
-                                        CumplimientoObjetivo:
-                                        <select
-                                            name="CumplimientoObjetivo"
-                                            value={registroEditar.CumplimientoObjetivo}
-                                            onChange={manejarCambioEdicion}
-                                        >
+                                    <label>CumplimientoObjetivo:
+                                        <select name="CumplimientoObjetivo" value={registroEditar.CumplimientoObjetivo} disabled onChange={manejarCambioEdicion}>
                                             <option value="SI">Sí</option>
                                             <option value="NO">No</option>
                                         </select>
                                     </label>
-
-                                    <label>
-                                        InteresDelTema:
-                                        <select
-                                            name="InteresDelTema"
-                                            value={registroEditar.InteresDelTema}
-                                            onChange={manejarCambioEdicion}
-                                        >
+                                    <label>InteresDelTema:
+                                        <select name="InteresDelTema" value={registroEditar.InteresDelTema} disabled onChange={manejarCambioEdicion}>
                                             <option value="SI">Sí</option>
                                             <option value="NO">No</option>
                                         </select>
                                     </label>
-
-                                    <label>
-                                        ParticipacionAlumnos:
-                                        <select
-                                            name="ParticipacionAlumnos"
-                                            value={registroEditar.ParticipacionAlumnos}
-                                            onChange={manejarCambioEdicion}
-                                        >
+                                    <label>ParticipacionAlumnos:
+                                        <select name="ParticipacionAlumnos" value={registroEditar.ParticipacionAlumnos} disabled onChange={manejarCambioEdicion}>
                                             <option value="SI">Sí</option>
                                             <option value="NO">No</option>
                                         </select>
                                     </label>
-
-                                    <label>
-                                        AclaracionDudas:
-                                        <select
-                                            name="AclaracionDudas"
-                                            value={registroEditar.AclaracionDudas}
-                                            onChange={manejarCambioEdicion}
-                                        >
+                                    <label>AclaracionDudas:
+                                        <select name="AclaracionDudas" value={registroEditar.AclaracionDudas} disabled onChange={manejarCambioEdicion}>
                                             <option value="SI">Sí</option>
                                             <option value="NO">No</option>
                                         </select>
                                     </label>
-
-                                    <label>
-                                        ReprogramacionDelTema:
-                                        <select
-                                            name="ReprogramacionDelTema"
-                                            value={registroEditar.ReprogramacionDelTema}
-                                            onChange={manejarCambioEdicion}
-                                        >
+                                    <label>ReprogramacionDelTema:
+                                        <select name="ReprogramacionDelTema" value={registroEditar.ReprogramacionDelTema} disabled onChange={manejarCambioEdicion}>
                                             <option value="SI">Sí</option>
                                             <option value="NO">No</option>
                                         </select>
                                     </label>
                                 </div>
 
-                                <label>
-                                    Ciclo:
-                                    <select
-                                        name="Ciclo"
-                                        value={registroEditar.Ciclo}
-                                        onChange={manejarCambioEdicion}
-                                    >
+                                <label>Ciclo:
+                                    <select name="Ciclo" value={registroEditar.Ciclo} disabled onChange={manejarCambioEdicion}>
                                         <option value="1er">1er</option>
                                         <option value="2do">2do</option>
                                         <option value="3er">3er</option>
@@ -403,43 +289,44 @@ const RegistroGrupalList = () => {
                                     </select>
                                 </label>
 
-                                <label>
-                                    AnimacionMotivacion:
-                                    <input
-                                        type="text"
-                                        name="AnimacionMotivacion"
-                                        value={registroEditar.AnimacionMotivacion}
-                                        onChange={manejarCambioEdicion}
-                                    />
-                                </label>
-                                <label>
-                                    ApropiacionDesarrollo:
-                                    <input
-                                        type="text"
-                                        name="ApropiacionDesarrollo"
-                                        value={registroEditar.ApropiacionDesarrollo}
-                                        onChange={manejarCambioEdicion}
-                                    />
-                                </label>
-                                <label>
-                                    TransferenciaPracticaCompromiso:
-                                    <input
-                                        type="text"
-                                        name="TransferenciaPracticaCompromiso"
-                                        value={registroEditar.TransferenciaPracticaCompromiso}
-                                        onChange={manejarCambioEdicion}
-                                    />
-                                </label>
-                                <label>
-                                    Evaluacion:
-                                    <input
-                                        type="text"
-                                        name="Evaluacion"
-                                        value={registroEditar.Evaluacion}
-                                        onChange={manejarCambioEdicion}
-                                    />
-                                </label>
-                                <button type="submit">Guardar Cambios</button>
+                                <button
+                                    type="button"
+                                    onClick={() => setMostrarCamposExtra(!mostrarCamposExtra)}
+                                    style={{
+                                         margin: '12px 0',
+        backgroundColor: '#dec5e3',
+        border: '2px solid purple',
+        color: '#1a1a1a',
+        padding: '10px',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        fontSize: '14px',
+        width: '100%', // ✅ para que no se salga
+        boxSizing: 'border-box', // ✅ que respete padding
+        textAlign: 'center' // ✅ alinear texto centrado
+                                    }}
+                                >
+                                    {mostrarCamposExtra ? 'Ocultar campos secundarios' : 'Mostrar campos secundarios'}
+                                </button>
+
+                                {mostrarCamposExtra && (
+                                    <>
+                                        <label>AnimacionMotivacion:
+                                            <input type="text" name="AnimacionMotivacion" value={registroEditar.AnimacionMotivacion} onChange={manejarCambioEdicion} disabled />
+                                        </label>
+                                        <label>ApropiacionDesarrollo:
+                                            <input type="text" name="ApropiacionDesarrollo" value={registroEditar.ApropiacionDesarrollo} onChange={manejarCambioEdicion} disabled />
+                                        </label>
+                                        <label>TransferenciaPracticaCompromiso:
+                                            <input type="text" name="TransferenciaPracticaCompromiso" value={registroEditar.TransferenciaPracticaCompromiso} onChange={manejarCambioEdicion} disabled />
+                                        </label>
+                                        <label>Evaluacion:
+                                            <input type="text" name="Evaluacion" value={registroEditar.Evaluacion} onChange={manejarCambioEdicion} disabled />
+                                        </label>
+                                    </>
+                                )}
+
+                                {/* <button type="submit">Guardar Cambios</button> */}
                             </form>
                         </div>
                     )}
