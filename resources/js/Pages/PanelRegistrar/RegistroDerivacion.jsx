@@ -8,8 +8,12 @@ const RegistroDerivacion = ({ alumno }) => {
     const [motivoDerivacion, setMotivoDerivacion] = useState('');
 
     useEffect(() => {
-        const hoy = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
-        setFechaDerivacion(hoy);
+        const hoy = new Date();
+        const yyyy = hoy.getFullYear();
+        const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dd = String(hoy.getDate()).padStart(2, '0');
+        const fechaLocal = `${yyyy}-${mm}-${dd}`;
+        setFechaDerivacion(fechaLocal);
     }, []);
 
     const handleSubmit = async (e) => {
@@ -46,7 +50,7 @@ const RegistroDerivacion = ({ alumno }) => {
             setActualmenteViveCon('');
             setMotivoDerivacion('');
 
-            
+
         } catch (error) {
             console.error('❌ Error:', error);
             alert('Ocurrió un error al enviar la derivación.');
@@ -61,7 +65,7 @@ const RegistroDerivacion = ({ alumno }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-1">
                 <div>
                     <label className="font-semibold text">Apellidos y Nombres:</label>
-                    <div className="border rounded px-2 py-1 bg-gray-100 text">{alumno.apellidos} {alumno.nombres}</div>
+                    <div className="border rounded px-2 py-1 bg-gray-100 text">{alumno.apellidos} {alumno.nombre}</div>
                 </div>
                 <div>
                     <label className="font-semibold text">Celular:</label>

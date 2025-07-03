@@ -134,7 +134,7 @@ const EstadisticasAtencion = ({ tutorId }) => {
     // Datos para gráfico de línea (por fecha)
     const datosAtencionesFecha = {
         labels: atencionesPorFecha.map((item) => {
-            const fecha = new Date(item.fecha);
+            const fecha = new Date(item.fecha + 'T00:00:00');
             return fecha.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' });
         }),
         datasets: [

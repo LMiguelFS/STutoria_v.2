@@ -7,7 +7,6 @@ import { useState } from 'react';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
-
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -22,7 +21,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
+                                {/* <NavLink
                                     href={route('dashboard.AdminPsicologo')}
                                     active={route().current('dashboard.AdminPsicologo')}
                                 >
@@ -33,23 +32,33 @@ export default function AuthenticatedLayout({ header, children }) {
                                     active={route().current('GestionUsuarios')}
                                 >
                                     Gestión de Usuarios
-                                </NavLink>
-                                <NavLink
-                                    href={route('STutoria')}
-                                    active={route().current('STutoria')}
-                                >
-                                    Sesiones de Tutoría
-                                </NavLink>
-                                <NavLink
-                                    href={route('derivaciones')}
-                                    active={route().current('derivaciones')}
-                                >
-                                    Derivaciones/Referencias
-                                </NavLink>
+                                </NavLink>*/}
+                                {user?.rol === 'admin' && (
+                                    <NavLink
+                                        href={route('STutoria')}
+                                        active={route().current('STutoria')}
+                                    >
+                                        Sesiones de Tutoría
+                                    </NavLink>)}
+                                {(user?.rol === 'admin' || user?.rol === 'psicologo') && (
+                                    <NavLink
+                                        href={route('derivaciones')}
+                                        active={route().current('derivaciones')}
+                                    >
+                                        Derivaciones/Referencias
+                                    </NavLink>)}
                             </div>
                         </div>
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
+
+                            <div className="flex items-center justify-end gap-2">
+                                {user?.nombres && user?.apellidos && (
+                                    <span className="text-gray-800 font-medium">
+                                        {user.nombres} {user.apellidos}
+                                    </span>
+                                )}
+                            </div>
                             <div className="relative ms-3 flex items-center">
                                 <Dropdown>
                                     <Dropdown.Trigger>

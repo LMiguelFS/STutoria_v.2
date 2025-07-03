@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 export default function EstudiantesDerivados({ codigosAlumno, filtros, onSeleccionarEstudiante }) {
     const [estudiantes, setEstudiantes] = useState([]);
+    const [busqueda, setBusqueda] = useState(""); // Nuevo estado para el filtro
 
     useEffect(() => {
         if (codigosAlumno && codigosAlumno.length > 0) {
@@ -20,23 +21,36 @@ export default function EstudiantesDerivados({ codigosAlumno, filtros, onSelecci
         }
     }, [codigosAlumno]);
 
+    // Filtrado por código, nombre o apellido
+    const estudiantesFiltrados = estudiantes.filter(est =>
+        est.codigo_alumno?.toLowerCase().includes(busqueda.toLowerCase()) ||
+        est.nombre?.toLowerCase().includes(busqueda.toLowerCase()) ||
+        est.apellidos?.toLowerCase().includes(busqueda.toLowerCase())
+    );
 
     return (
-        <div className="  bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-lg overflow-hidden">
+        <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-lg overflow-hidden">
             {/* Header */}
             <div className="px-4 py-3 bg-gray-800/50 border-b border-gray-700">
                 <div className="flex items-center justify-between">
                     <h2 className="text-white font-semibold text-sm">Estudiantes Derivados</h2>
-                    <div className="flex items-center space-x-2">
-                        <span className="text-gray-400 text-xs">{estudiantes.length} estudiantes</span>
-
+                    <div className="flex items-center space-x-5">
+                        {/* Input de búsqueda */}
+                        <input
+                            type="text"
+                            className="w-64 px-15 py-1 rounded bg-gray-700 text-white text-xs focus:outline-none"
+                            placeholder="Buscar por código, nombre o apellido"
+                            value={busqueda}
+                            onChange={e => setBusqueda(e.target.value)}
+                        />
+                        <span className="text-gray-400 text-xs">{estudiantesFiltrados.length} estudiantes</span>
                     </div>
                 </div>
             </div>
 
             {/* Content */}
-            <div className="overflow-auto">
-                <table className=" text-sm">
+            <div className="overflow-y-auto max-h-[670px]">
+                <table className="text-sm">
                     <thead className="sticky top-0 bg-gray-800/80 backdrop-blur-sm">
                         <tr>
                             <th className="px-4 py-3 text-left text-gray-300 font-medium border-b border-gray-700">
@@ -57,7 +71,7 @@ export default function EstudiantesDerivados({ codigosAlumno, filtros, onSelecci
                         </tr>
                     </thead>
                     <tbody>
-                        {estudiantes.map((estudiante) => (
+                        {estudiantesFiltrados.map((estudiante) => (
                             <tr key={estudiante.id} className="hover:bg-gray-800/30 transition-colors border-b border-gray-700/50">
                                 <td className="px-4 py-3">
                                     <div className="flex items-center space-x-3">
@@ -95,7 +109,7 @@ export default function EstudiantesDerivados({ codigosAlumno, filtros, onSelecci
                     </tbody>
                 </table>
 
-                {estudiantes.length === 0 && (
+                {estudiantesFiltrados.length === 0 && (
                     <div className="flex flex-col items-center justify-center py-12 text-gray-400">
                         <svg className="w-12 h-12 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />

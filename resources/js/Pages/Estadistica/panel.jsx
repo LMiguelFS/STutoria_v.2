@@ -21,7 +21,7 @@ export default function PanelRegistrar() {
         setSelectedComponent(null);
     };
 
-  
+
 
     return (
         <>
@@ -36,7 +36,7 @@ export default function PanelRegistrar() {
 
                     <button onClick={() => openModal(<Estadisticasatencion />)} className="flex flex-col items-center">
                         <img src="/img/graficoInvestigacion.png" alt="Botón 2" className="w-24 h-24 mb-4" />
-                        <h2 className="text-center text-lg font-semibold">SESIONES GRUPALES</h2>
+                        <h2 className="text-center text-lg font-semibold">SESIONES INDIVIDUALES</h2>
                     </button>
 
                 </div>
