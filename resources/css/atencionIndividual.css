@@ -102,3 +102,7 @@ textarea {
         width: 100%;
     }
 }
+
+.input-corto {
+    width: 20px !important;
+}

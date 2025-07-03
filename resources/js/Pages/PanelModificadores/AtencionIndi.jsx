@@ -12,6 +12,7 @@ const AtencionIndividualList = () => {
     const [filtros, setFiltros] = useState({
         fecha_atencion: "",
         codigo_alumno: "",
+        numero_atencion: "",
     });
     const [datos, setDatos] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -26,6 +27,7 @@ const AtencionIndividualList = () => {
                     id_user: idUser,
                     fecha_atencion: filtros.fecha_atencion || "",
                     codigo_alumno: filtros.codigo_alumno || "",
+                    numero_atencion: filtros.numero_atencion || "",
                 },
             });
             setDatos(response.data); // Guarda los datos en el estado
@@ -153,6 +155,17 @@ const AtencionIndividualList = () => {
                             className="filtro-input"
                         />
                     </label>
+                        <label className="filtro-label">
+                            Número Atención:
+                            <input
+                                type="number"
+                                name="numero_atencion"
+                                value={filtros.numero_atencion}
+                                onChange={manejarCambio}
+                                className="filtro-input"
+                            />
+                        </label>
+
                     <button onClick={aplicarFiltros} className="filtro-boton">
                         Filtrar
                     </button>
@@ -170,6 +183,7 @@ const AtencionIndividualList = () => {
                                     <th>ID</th>
                                     <th>Fecha Atención</th>
                                     <th>Codigo Alumno</th>
+                                    <th>Número Atención</th>
                                     <th>Descripción Consulta</th>
                                     <th>Acuerdos Establecidos</th>
                                     <th>Acciones</th>
@@ -182,6 +196,7 @@ const AtencionIndividualList = () => {
                                             <td>{registro.id}</td>
                                             <td>{registro.fecha_atencion}</td>
                                             <td>{registro.codigo_alumno}</td>
+                                            <td>{registro.numero_atencion}</td>
                                             <td>{registro.descripcion_consulta}</td>
                                             <td>{registro.acuerdos_establecidos}</td>
                                             <td>
