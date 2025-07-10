@@ -38,7 +38,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                         href={route('STutoria')}
                                         active={route().current('STutoria')}
                                     >
-                                        Sesiones de Tutoría
+                                        Sesioness de Tutoría
                                     </NavLink>)}
                                 {(user?.rol === 'admin' || user?.rol === 'psicologo') && (
                                     <NavLink
