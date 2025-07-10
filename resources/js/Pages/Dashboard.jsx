@@ -24,7 +24,7 @@ export default function Dashboard() {
                 <div className="bg-purple-900 text-white w-20 md:w-44 lg:w-60 p-2 md:p-4 flex flex-col items-center space-y-3 md:space-y-8 shadow-lg min-h-screen transition-all duration-300">
                     <span className="text-lg font-bold mb-0.25 hidden md:block">Opciones</span>
                     {[
-                        { label: 'REGISTRAR', img: '/img/GenerarI.png', description: 'En este apartado podrás crear registros de sesiones individuales, grupales y registrar a alumnos' },
+                        { label: 'REGISTRAR', img: '/img/GenerarI.png', description: 'En este apartado podrás crear registros de sesiones individuales, grupales y registrar a alumnos prueba' },
                         { label: 'CONSULTAR', img: '/img/Buscar_I.png', description: 'En este apartado podrás buscar registros individuales/grupales o de alumnos y poder modificar o eliminar' },
                         { label: 'NOTIFICAR', img: '/img/notificacion_I.png', description: 'En este apartado podrás buscar sesiones individuales próximas y notificar al estudiante' },
                         { label: 'ESTADÍSTICA', img: '/img/analitica.png', description: 'En este apartado podrás visualizar estadistica de los diferentes analisis de las sesiones de tutoria' },
@@ -56,7 +56,7 @@ export default function Dashboard() {
                         </div>
                         <div className="bg-white p-2 md:p-8 rounded-2xl shadow-lg flex-1 flex items-center justify-center min-h-[350px] md:min-h-[450px]">
                             <div className="w-full h-full flex items-center justify-center">
-                                {selectedOption === 'En este apartado podrás crear registros de sesiones individuales, grupales y registrar a alumnos' && <PanelRegistrar />}
+                                {selectedOption === 'En este apartado podrás crear registros de sesiones individuales, grupales y registrar a alumnos prueba' && <PanelRegistrar />}
                                 {selectedOption === 'En este apartado podrás generar informes grupales e individuales de las sesiones realizadas' && <PanelReportes />}
                                 {selectedOption === 'En este apartado podrás buscar sesiones individuales próximas y notificar al estudiante' && <Notificaciones />}
                                 {selectedOption === 'En este apartado podrás buscar registros individuales/grupales o de alumnos y poder modificar o eliminar' && <ModificarD />}
