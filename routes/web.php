@@ -22,7 +22,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('DashboardAdmin');
     })->name('dashboard.AdminPsicologo');
 
-    Route::get('/prueba', function () {
+    Route::get('/usuarios', function () {
         return Inertia::render('Admin/GestionUsuarios');
     })->name('GestionUsuarios');
 

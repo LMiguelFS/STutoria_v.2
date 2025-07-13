@@ -26,20 +26,26 @@ export default function AuthenticatedLayout({ header, children }) {
                                     active={route().current('dashboard.AdminPsicologo')}
                                 >
                                     Panel de Control
-                                </NavLink>
-                                <NavLink
-                                    href={route('GestionUsuarios')}
-                                    active={route().current('GestionUsuarios')}
-                                >
-                                    Gestión de Usuarios
-                                </NavLink>*/}
+                                </NavLink> */}
                                 {user?.rol === 'admin' && (
-                                    <NavLink
-                                        href={route('STutoria')}
-                                        active={route().current('STutoria')}
-                                    >
-                                        Sesiones de Tutoría
-                                    </NavLink>)}
+                                    <>
+
+                                        <NavLink
+                                            href={route('GestionUsuarios')}
+                                            active={route().current('GestionUsuarios')}
+                                        >
+                                            Gestión de Usuarios
+                                        </NavLink>
+
+                                        <NavLink
+                                            href={route('STutoria')}
+                                            active={route().current('STutoria')}
+                                        >
+                                            Sesiones de Tutoría
+                                        </NavLink>
+                                    </>
+                                )}
+
                                 {(user?.rol === 'admin' || user?.rol === 'psicologo') && (
                                     <NavLink
                                         href={route('derivaciones')}

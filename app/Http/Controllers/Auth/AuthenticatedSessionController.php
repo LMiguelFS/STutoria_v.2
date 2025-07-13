@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
         $user = Auth::user();
 
         if ($user->rol === 'admin') {
-            return redirect()->route('STutoria');
+            return redirect()->route('GestionUsuarios');
         } elseif ($user->rol === 'psicologo') {
             return redirect()->route('derivaciones');
         } elseif ($user->rol === 'tutor') {
