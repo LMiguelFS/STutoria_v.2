@@ -84,6 +84,8 @@ Route::match(['get', 'post'], '/derivaciones/estadisticas', [DerivacionControlle
 Route::post('/list-derivaciones', [DerivacionController::class, 'getDerivacionesByCodigo']);
 //Ruta para obtener los tutores por carrera
 Route::get('/tutores/carrera', [Usercontroller::class, 'tutorPorCarrera']);
+//Ruta estadistica #N de usuarios
+Route::get('/numero-usuarios', [Usercontroller::class, 'NumeroUsuarios']);
 //---------------------------------------@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-----------------------------
 // APIs para Atención Individual
 Route::prefix('atencionindividuals')->group(function () {
