@@ -211,15 +211,15 @@ export default function EstadUsuarios() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
                     <div className="py-1 bg-gray-800 rounded-md p-1 border border-gray-600">
                         <div className="text-lg font-bold text-white">{totalTutores}</div>
-                        <div className="text-gray-400 text-xs">Tutores</div>
+                        <div className="text-gray-400 text-xs">Tutor</div>
                     </div>
                     <div className="bg-gray-800 rounded-md p-1 border border-gray-600">
                         <div className="text-lg font-bold text-emerald-400">{otrosRoles.numero_psicologos}</div>
-                        <div className="text-gray-400 text-xs">Psicólogos</div>
+                        <div className="text-gray-400 text-xs">Psicólogo</div>
                     </div>
                     <div className="bg-gray-800 rounded-md p-1 border border-gray-600">
                         <div className="text-lg font-bold text-orange-400">{otrosRoles.numero_admin}</div>
-                        <div className="text-gray-400 text-xs">Administradores</div>
+                        <div className="text-gray-400 text-xs">Administrador</div>
                     </div>
                     <div className="bg-gray-800 rounded-md p-1 border border-gray-600">
                         <div className="text-lg font-bold text-blue-400">{totalTutores + totalOtrosRoles}</div>
