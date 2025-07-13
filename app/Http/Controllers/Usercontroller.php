@@ -51,4 +51,14 @@ class Usercontroller extends Controller
 
         return response()->json($tutores);
     }
+
+    public function tutorPorCarrera(Request $request)
+    {
+
+        $tutores = DB::table('users')
+            ->select('nombres', 'apellidos', 'programa_estudios','rol','celular','email')
+            ->get();
+
+        return response()->json($tutores);
+    }
 }
