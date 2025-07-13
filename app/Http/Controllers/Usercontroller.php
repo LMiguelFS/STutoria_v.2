@@ -56,9 +56,32 @@ class Usercontroller extends Controller
     {
 
         $tutores = DB::table('users')
-            ->select('nombres', 'apellidos', 'programa_estudios','rol','celular','email')
+            ->select('nombres', 'apellidos', 'programa_estudios', 'rol', 'celular', 'email')
             ->get();
 
         return response()->json($tutores);
+    }
+
+    public function NumeroUsuarios()
+    {
+        $numeroTutoresPorCarrera = DB::table('users')
+            ->select('programa_estudios', DB::raw('COUNT(*) as total'))
+            ->where('rol', 'tutor')
+            ->groupBy('programa_estudios')
+            ->get();
+
+        $numeroPsicologos = DB::table('users')
+            ->where('rol', 'psicologo')
+            ->count();
+        $numeroAdmin = DB::table('users')
+            ->where('rol', 'admin')
+            ->count();
+
+        return response()
+            ->json([
+                'numero_tutores' => $numeroTutoresPorCarrera,
+                'numero_psicologos' => $numeroPsicologos,
+                'numero_admin' => $numeroAdmin
+            ]);
     }
 }

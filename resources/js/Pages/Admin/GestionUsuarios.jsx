@@ -8,18 +8,13 @@ import TablaUsuarioFiltro from '@/Components/ComponentsAdmin/TableUsuarioFiltro'
 export default function GestionUsuarios() {
     return (
         <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Gestión de Usuarios
-                </h2>
-            }
         >
             <Head title="GUsuarios" />
 
             <div className="grid grid-cols-[1fr_2fr_1fr] gap-2">
                 {/* Columna izquierda con 2 paneles verticales */}
                 <div className="flex flex-col gap-6">
-                    <div className="border p-4 rounded shadow">
+                    <div className="border p-1 rounded shadow">
                         <EstadUsuarios />
                     </div>
                     <div className="border p-4 rounded shadow">
