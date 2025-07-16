@@ -4,7 +4,6 @@ import { Head } from '@inertiajs/react';
 import EstadUsuarios from '@/Components/ComponentsAdmin/EstadUsuarios';
 import InputMensajes from '@/Components/ComponentsAdmin/InputMensajes';
 import TablaUsuarioFiltro from '@/Components/ComponentsAdmin/TableUsuarioFiltro';
-import Register from '../Auth/Register';
 
 export default function GestionUsuarios() {
     return (
@@ -30,7 +29,7 @@ export default function GestionUsuarios() {
 
                 {/* Columna derecha vacía (placeholder o espacio futuro) */}
                 <div className="border p-4 rounded shadow">
-                    <Register />
+                    <h2 className="text-lg font-bold mb-2">Panel futuro</h2>
                 </div>
             </div>
 
