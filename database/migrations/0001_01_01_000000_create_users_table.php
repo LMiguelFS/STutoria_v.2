@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->enum('rol', ['admin', 'tutor', 'psicologo'])->default('tutor');
-            $table->string('programa_estudios', 45)->nullable();
+            $table->string('programa_estudios', 10)->nullable();
             $table->timestamps();
         });
 
