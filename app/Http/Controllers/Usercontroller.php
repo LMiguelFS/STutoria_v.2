@@ -4,9 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules;
 
 class Usercontroller extends Controller
 {
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'nombres' => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'rol' => 'required|string|in:tutor,psicologo,admin',
+            'programa_estudios' => 'nullable|string|max:255',
+            'celular' => 'nullable|string|max:15'
+        ]);
+
+        $user = DB::table('users')->insert($data);
+
+        return response()->json(['message' => 'Usuario creado exitosamente', 'user' => $user], 201);
+    }
+
     public function RecuperarID(Request $request)
     {
         $Correo = $request->input('email');

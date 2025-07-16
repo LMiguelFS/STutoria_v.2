@@ -61,7 +61,7 @@ const RegistroGrupal = ({ onClose }) => {
                 NroEstudiantesMujeres: response.data.data?.mujeres || 0
             }));
         } catch (error) {
-            console.error("Error al contar por sexo:", error);
+            //console.error("Error al contar por sexo:", error);
         }
     }, []);
 
@@ -172,7 +172,7 @@ const RegistroGrupal = ({ onClose }) => {
                 throw new Error("Debe registrar al menos un estudiante");
             }
 
-            console.log("Datos finales a enviar:", JSON.stringify(datosParaEnviar, null, 2));
+            //console.log("Datos finales a enviar:", JSON.stringify(datosParaEnviar, null, 2));
 
             // 4. Enviar con el header Content-Type correcto
             const response = await axios.post('/api/asistencia', datosParaEnviar, {

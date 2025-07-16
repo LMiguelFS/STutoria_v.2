@@ -71,6 +71,8 @@ Route::post('/derivaciones', [DerivacionController::class, 'store']);
 
 // Ruta para obtener los tutores filtrados por carrera y nombre
 Route::get('/filtrar/tutores', [Usercontroller::class, 'filtrarTutores']);
+//Ruta para crear un nuevo usuario
+Route::post('/usuarios', [Usercontroller::class, 'store']);
 //Ruta para obtener cantidad de tutorias grupales por fecha
 Route::get('/estadisticaGrupal/por-fecha/{user_id}', [AtencionGrupalController::class, 'contarSesionesPorFecha']);
 // Ruta para obtener los temas grupales

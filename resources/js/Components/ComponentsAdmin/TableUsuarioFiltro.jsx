@@ -180,7 +180,7 @@ export default function TablaUsuarioFiltro() {
                             className="w-full px-3 py-1 bg-white/20 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white/50"
                         >
                             <option value="tutor" className="text-black">Tutor</option>
-                            <option value="coordinador" className="text-black">Coordinador</option>
+                            <option value="psicologo" className="text-black">Psicologo</option>
                             <option value="admin" className="text-black">Admin</option>
                             <option value="" className="text-black">Todos los roles</option>
                         </select>
@@ -285,6 +285,20 @@ export default function TablaUsuarioFiltro() {
                                             </button>
                                         ) : (
                                             <span className="text-gray-500 text-xs">Sin celular</span>
+                                        )}
+
+                                        {tutor.email ? (
+                                            <button
+                                                onClick={() => abrirEmail(tutor.email)}
+                                                className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded-full transition-all duration-200"
+                                                title={`Enviar email a ${tutor.email}`}
+                                            >
+                                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                                                </svg>
+                                            </button>
+                                        ) : (
+                                            <span className="text-gray-500 text-xs">Sin email</span>
                                         )}
                                     </td>
                                     <td className="px-4 py-3 text-center">

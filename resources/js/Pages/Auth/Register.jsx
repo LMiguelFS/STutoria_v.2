@@ -7,15 +7,16 @@ import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
+        nombres: '',
         email: '',
         password: '',
+        programa_estudios: '',
         password_confirmation: '',
     });
 
     const submit = (e) => {
         e.preventDefault();
-
+        console.log(data);
         post(route('register'), {
             onFinish: () => reset('password', 'password_confirmation'),
         });
@@ -34,7 +35,7 @@ export default function Register() {
                         name="nombres"
                         value={data.nombres}
                         className="mt-1 block w-full"
-                        autoComplete="nnombresame"
+                        autoComplete=""
                         isFocused={true}
                         onChange={(e) => setData('nombres', e.target.value)}
                         required
@@ -59,6 +60,41 @@ export default function Register() {
 
                     <InputError message={errors.name} className="mt-2" />
                 </div>
+
+                <div>
+                    <InputLabel htmlFor="Rol" value="Rol" />
+
+                    <TextInput
+                        id="rol"
+                        name="rol"
+                        value={data.rol}
+                        className="mt-1 block w-full"
+                        autoComplete=""
+                        isFocused={true}
+                        onChange={(e) => setData('rol', e.target.value)}
+                        required
+                    />
+
+                    <InputError message={errors.name} className="mt-2" />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="Programa de Estudios" value="Programa de Estudios" />
+
+                    <TextInput
+                        id="programa_estudios"
+                        name="programa_estudios"
+                        value={data.programa_estudios}
+                        className="mt-1 block w-full"
+                        autoComplete=""
+                        isFocused={true}
+                        onChange={(e) => setData('programa_estudios', e.target.value)}
+                        required
+                    />
+
+                    <InputError message={errors.name} className="mt-2" />
+                </div>
+
                 <div className="mt-4">
                     <InputLabel htmlFor="email" value="Email" />
 
