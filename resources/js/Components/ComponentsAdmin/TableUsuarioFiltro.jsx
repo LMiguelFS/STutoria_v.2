@@ -180,7 +180,7 @@ export default function TablaUsuarioFiltro() {
                             className="w-full px-3 py-1 bg-white/20 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white/50"
                         >
                             <option value="tutor" className="text-black">Tutor</option>
-                            <option value="psicologo" className="text-black">Psicologo</option>
+                            <option value="coordinador" className="text-black">Coordinador</option>
                             <option value="admin" className="text-black">Admin</option>
                             <option value="" className="text-black">Todos los roles</option>
                         </select>
