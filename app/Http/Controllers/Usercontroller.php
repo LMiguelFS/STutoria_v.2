@@ -4,27 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rules;
 
 class Usercontroller extends Controller
 {
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'nombres' => 'required|string|max:255',
-            'apellidos' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'rol' => 'required|string|in:tutor,psicologo,admin',
-            'programa_estudios' => 'nullable|string|max:255',
-            'celular' => 'nullable|string|max:15'
-        ]);
-
-        $user = DB::table('users')->insert($data);
-
-        return response()->json(['message' => 'Usuario creado exitosamente', 'user' => $user], 201);
-    }
-
     public function RecuperarID(Request $request)
     {
         $Correo = $request->input('email');
@@ -68,38 +50,5 @@ class Usercontroller extends Controller
         $tutores = $query->get();
 
         return response()->json($tutores);
-    }
-
-    public function tutorPorCarrera(Request $request)
-    {
-
-        $tutores = DB::table('users')
-            ->select('nombres', 'apellidos', 'programa_estudios', 'rol', 'celular', 'email')
-            ->get();
-
-        return response()->json($tutores);
-    }
-
-    public function NumeroUsuarios()
-    {
-        $numeroTutoresPorCarrera = DB::table('users')
-            ->select('programa_estudios', DB::raw('COUNT(*) as total'))
-            ->where('rol', 'tutor')
-            ->groupBy('programa_estudios')
-            ->get();
-
-        $numeroPsicologos = DB::table('users')
-            ->where('rol', 'psicologo')
-            ->count();
-        $numeroAdmin = DB::table('users')
-            ->where('rol', 'admin')
-            ->count();
-
-        return response()
-            ->json([
-                'numero_tutores' => $numeroTutoresPorCarrera,
-                'numero_psicologos' => $numeroPsicologos,
-                'numero_admin' => $numeroAdmin
-            ]);
     }
 }
