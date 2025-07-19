@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\registroGrupal;
+use App\Models\registrogrupal;
 use App\Models\Asistencia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -62,7 +62,7 @@ class AsistenciaController extends Controller
 
         try {
             // Crear el registro grupal
-            $registro = new registroGrupal();
+            $registro = new registrogrupal();
             $registro->user_id = $validated['user_id'];
             $registro->Fecha = $validated['Fecha'];
             $registro->Tema = $validated['Tema'];
